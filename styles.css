@@ -24,6 +24,7 @@
     transition: opacity 2s ease-in-out;
 }
 
+/* Hanya slide aktif yang terlihat */
 .slide.active {
     opacity: 1;
 }
@@ -58,19 +59,26 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.5;
+    opacity: 0.5; /* Bisa diatur lebih terang/gelap */
 }
 
-/* Popup Content */
+/* Popup Tersembunyi */
+.popup.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Popup Content - Agar Tombol Muncul */
 .popup-content {
     position: relative;
     z-index: 10;
     text-align: center;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.6); /* Latar belakang tombol agar terlihat jelas */
     padding: 20px;
     border-radius: 10px;
 }
 
+/* Tombol Masuk */
 #enter-btn {
     padding: 15px 30px;
     font-size: 20px;
@@ -93,6 +101,7 @@ nav {
     display: none;
     background: #1a1a1a;
     padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
 }
 
@@ -104,10 +113,13 @@ nav ul {
 }
 
 nav ul li {
+    position: relative;
     margin: 0 15px;
 }
 
+/* Kotak Navigasi */
 .nav-box {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,32 +135,12 @@ nav ul li {
     background: #444;
 }
 
+/* Tombol Navigasi */
 .nav-box a {
     text-decoration: none;
     color: white;
     font-size: 18px;
     font-weight: bold;
-}
-
-/* Kotak Konten */
-.content-box {
-    width: 60%;
-    margin: 100px auto;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Efek Animasi Text */
-#animated-text {
-    font-size: 18px;
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 2px solid white;
-    display: inline-block;
-    padding-right: 5px;
+    position: relative;
+    z-index: 1;
 }
