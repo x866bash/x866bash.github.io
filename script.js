@@ -1,20 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const popup = document.getElementById("popup");
-    const enterBtn = document.getElementById("enter-btn");
+    const links = document.querySelectorAll(".nav-link");
+    const content = document.getElementById("content");
 
-    // Saat tombol ditekan, popup menghilang
-    enterBtn.addEventListener("click", function () {
-        popup.style.display = "none";
-    });
+    links.forEach(link => {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            const url = this.getAttribute("href");
 
-    // Smooth Scroll untuk navigasi
-    document.querySelectorAll('nav ul li a').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            document.getElementById(targetId).scrollIntoView({
-                behavior: 'smooth'
-            });
+            // Ambil konten halaman tanpa reload
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    content.innerHTML = data;
+                    content.classList.add("fade-in");
+                    setTimeout(() => content.classList.remove("fade-in"), 500);
+                })
+                .catch(error => console.error("Error:", error));
         });
     });
 });
