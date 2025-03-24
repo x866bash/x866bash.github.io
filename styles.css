@@ -36,40 +36,64 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     z-index: 1000;
     opacity: 1;
     transition: opacity 0.5s ease-out;
 }
 
+/* Popup Background */
+.popup-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.popup-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5; /* Bisa diatur lebih terang/gelap */
+}
+
+/* Popup Tersembunyi */
 .popup.hidden {
     opacity: 0;
     pointer-events: none;
 }
 
-/* Tombol Masuk */
+/* Popup Content - Agar Tombol Muncul */
 .popup-content {
+    position: relative;
+    z-index: 10;
     text-align: center;
+    background: rgba(0, 0, 0, 0.6); /* Latar belakang tombol agar terlihat jelas */
+    padding: 20px;
+    border-radius: 10px;
 }
 
+/* Tombol Masuk */
 #enter-btn {
     padding: 15px 30px;
     font-size: 20px;
     font-weight: bold;
     color: white;
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
 }
 
 #enter-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
 }
 
 /* Navigasi */
