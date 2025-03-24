@@ -1,3 +1,27 @@
+/* Background Animasi */
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.background-container img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+/* Tampilkan hanya satu gambar pada satu waktu */
+.background-container img.active {
+    opacity: 1;
+}
+
 /* Popup Full-Screen */
 .popup {
     position: fixed;
@@ -5,7 +29,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('Photos.jpg') center/cover no-repeat; /* Ganti dengan foto */
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,7 +67,7 @@
 
 /* Navigasi */
 nav {
-    display: none; /* Sembunyikan navigasi sampai popup ditutup */
+    display: none;
     background: #1a1a1a;
     padding: 15px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -72,7 +96,7 @@ nav ul li {
     height: 50px;
     background: #333;
     border-radius: 8px;
-    overflow: hidden; /* Agar efek ripple tidak keluar */
+    overflow: hidden;
     transition: background 0.3s;
 }
 
@@ -88,54 +112,4 @@ nav ul li {
     font-weight: bold;
     position: relative;
     z-index: 1;
-}
-
-/* Efek Ripple */
-.ripple {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    transform: scale(0);
-    animation: rippleEffect 0.6s linear;
-}
-
-@keyframes rippleEffect {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-/* Efek Pergantian Halaman */
-.fade-in {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeIn 0.5s ease-out forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fade-out {
-    opacity: 1;
-    transform: translateY(0);
-    animation: fadeOut 0.3s ease-in forwards;
-}
-
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-}
-
-/* Tampilkan Navigasi Setelah Popup Ditutup */
-.hidden {
-    display: none;
 }
