@@ -1,6 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const links = document.querySelectorAll(".nav-box");
+    const popup = document.getElementById("popup");
+    const enterBtn = document.getElementById("enter-btn");
+    const navbar = document.getElementById("navbar");
 
+    enterBtn.addEventListener("click", function () {
+        popup.classList.add("hidden"); // Hilangkan popup dengan efek smooth
+        setTimeout(() => {
+            popup.style.display = "none"; // Hilangkan dari tampilan
+            navbar.style.display = "block"; // Tampilkan navigasi setelah popup ditutup
+        }, 500);
+    });
+
+    // Efek Ripple untuk Navigasi
+    const links = document.querySelectorAll(".nav-box");
     links.forEach(box => {
         box.addEventListener("click", function (event) {
             event.preventDefault();
@@ -39,16 +51,5 @@ document.addEventListener("DOMContentLoaded", function () {
                     .catch(error => console.error("Error:", error));
             }, 300);
         });
-    document.addEventListener("DOMContentLoaded", function () {
-    const popup = document.getElementById("popup");
-    const enterBtn = document.getElementById("enter-btn");
-    const navbar = document.getElementById("navbar");
-
-    enterBtn.addEventListener("click", function () {
-        popup.classList.add("hidden"); // Hilangkan popup dengan efek smooth
-        setTimeout(() => {
-            popup.style.display = "none"; // Hilangkan dari tampilan
-            navbar.style.display = "block"; // Tampilkan navigasi setelah popup ditutup
-        }, 500);
     });
 });
