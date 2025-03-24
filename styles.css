@@ -14,6 +14,62 @@ body {
     padding-top: 60px;
 }
 
+/* Popup Full-Screen */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('background.jpg') center/cover no-repeat; /* Ganti dengan foto yang kamu inginkan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.popup.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Tombol Masuk */
+.popup-content {
+    text-align: center;
+}
+
+#enter-btn {
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#enter-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Navigasi & Konten */
+nav {
+    display: none; /* Sembunyikan navigasi sampai popup ditutup */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: white;
+    text-align: center;
+    padding-top: 60px;
+    }
+
 /* Style Navigasi */
 nav {
     position: fixed;
