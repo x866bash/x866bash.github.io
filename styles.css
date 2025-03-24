@@ -33,20 +33,35 @@ nav ul {
 
 nav ul li {
     position: relative;
-    margin: 0 20px;
-    overflow: hidden; /* Agar efek ripple tidak keluar dari button */
+    margin: 0 15px;
 }
 
-nav ul li a {
+/* Kotak Navigasi */
+.nav-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 50px;
+    background: #333;
+    border-radius: 8px;
+    overflow: hidden; /* Agar efek ripple tidak keluar */
+    transition: background 0.3s;
+}
+
+.nav-box:hover {
+    background: #444;
+}
+
+/* Tombol Navigasi */
+.nav-box a {
     text-decoration: none;
     color: white;
     font-size: 18px;
     font-weight: bold;
-    padding: 10px 15px;
-    display: inline-block;
     position: relative;
-    overflow: hidden;
-    transition: background 0.3s, color 0.3s;
+    z-index: 1;
 }
 
 /* Efek Ripple */
@@ -67,6 +82,32 @@ nav ul li a {
     }
 }
 
+/* Efek Pergantian Halaman */
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-out {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeOut 0.3s ease-in forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
 /* Konten */
 main {
     padding: 40px;
