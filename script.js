@@ -1,32 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const links = document.querySelectorAll(".nav-link");
-    const content = document.getElementById("content");
+    const links = document.querySelectorAll(".nav-box");
 
-    links.forEach(link => {
-        link.addEventListener("click", function (event) {
+    links.forEach(box => {
+        box.addEventListener("click", function (event) {
             event.preventDefault();
-            const url = this.getAttribute("href");
-
-            // Ambil konten halaman tanpa reload
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    content.innerHTML = data;
-                    content.classList.add("fade-in");
-                    setTimeout(() => content.classList.remove("fade-in"), 500);
-                })
-                .catch(error => console.error("Error:", error));
-        });
-    });
-
-document.addEventListener("DOMContentLoaded", function () {
-    const links = document.querySelectorAll(".nav-link");
-    const content = document.getElementById("content");
-
-    links.forEach(link => {
-        link.addEventListener("click", function (event) {
-            event.preventDefault();
-            const url = this.getAttribute("href");
+            const link = this.querySelector(".nav-link");
+            const url = link.getAttribute("href");
 
             // Efek Ripple
             const ripple = document.createElement("span");
@@ -43,19 +22,19 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => ripple.remove(), 600);
 
             // Efek Fade-Out Sebelum Memuat Halaman Baru
-            content.classList.add("fade-out");
+            document.getElementById("content").classList.add("fade-out");
 
             setTimeout(() => {
                 // Ambil konten halaman tanpa reload
                 fetch(url)
                     .then(response => response.text())
                     .then(data => {
-                        content.innerHTML = data;
+                        document.getElementById("content").innerHTML = data;
 
                         // Efek Fade-In Setelah Halaman Baru Dimuat
-                        content.classList.remove("fade-out");
-                        content.classList.add("fade-in");
-                        setTimeout(() => content.classList.remove("fade-in"), 500);
+                        document.getElementById("content").classList.remove("fade-out");
+                        document.getElementById("content").classList.add("fade-in");
+                        setTimeout(() => document.getElementById("content").classList.remove("fade-in"), 500);
                     })
                     .catch(error => console.error("Error:", error));
             }, 300);
