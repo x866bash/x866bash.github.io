@@ -11,45 +11,37 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 500);
     });
 
-    // Efek Ripple untuk Navigasi
-    const links = document.querySelectorAll(".nav-box");
-    links.forEach(box => {
-        box.addEventListener("click", function (event) {
-            event.preventDefault();
-            const link = this.querySelector(".nav-link");
-            const url = link.getAttribute("href");
+    // Animasi Background Gambar
+    const images = [
+        "image1.jpg",
+        "image2.jpg",
+        "image3.jpg",
+        "image4.jpg",
+        "image5.jpg",
+        "image6.jpg",
+        "image7.jpg",
+        "image8.jpg",
+        "image9.jpg",
+        "image10.jpg"
+    ];
 
-            // Efek Ripple
-            const ripple = document.createElement("span");
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
-            ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
-            ripple.classList.add("ripple");
+    const bgContainer = document.createElement("div");
+    bgContainer.classList.add("background-container");
+    document.body.prepend(bgContainer);
 
-            this.appendChild(ripple);
-
-            // Hapus elemen ripple setelah animasi selesai
-            setTimeout(() => ripple.remove(), 600);
-
-            // Efek Fade-Out Sebelum Memuat Halaman Baru
-            document.getElementById("content").classList.add("fade-out");
-
-            setTimeout(() => {
-                // Ambil konten halaman tanpa reload
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById("content").innerHTML = data;
-
-                        // Efek Fade-In Setelah Halaman Baru Dimuat
-                        document.getElementById("content").classList.remove("fade-out");
-                        document.getElementById("content").classList.add("fade-in");
-                        setTimeout(() => document.getElementById("content").classList.remove("fade-in"), 500);
-                    })
-                    .catch(error => console.error("Error:", error));
-            }, 300);
-        });
+    images.forEach((src, index) => {
+        const img = document.createElement("img");
+        img.src = src;
+        if (index === 0) img.classList.add("active");
+        bgContainer.appendChild(img);
     });
+
+    let currentIndex = 0;
+    setInterval(() => {
+        const bgImages = document.querySelectorAll(".background-container img");
+        bgImages[currentIndex].classList.remove("active");
+
+        currentIndex = (currentIndex + 1) % images.length;
+        bgImages[currentIndex].classList.add("active");
+    }, 5000); // Ganti gambar setiap 5 detik
 });
