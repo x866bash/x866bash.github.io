@@ -1,14 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const popup = document.getElementById("popup")!;
-    const enterBtn = document.getElementById("enter-btn")!;
-    const navbar = document.getElementById("navbar")!;
-    const animatedText = document.getElementById("animated-text")!;
+    const popup = document.getElementById("popup");
+    const enterBtn = document.getElementById("enter-btn");
+    const navbar = document.getElementById("navbar");
 
     enterBtn.addEventListener("click", function () {
-        popup.classList.add("hidden");
+        popup.classList.add("hidden"); // Hilangkan popup dengan efek smooth
         setTimeout(() => {
-            popup.style.display = "none";
-            navbar.style.display = "block";
+            popup.style.display = "none"; // Hilangkan dari tampilan
+            navbar.style.display = "block"; // Tampilkan navigasi setelah popup ditutup
         }, 500);
     });
 
@@ -22,19 +21,5 @@ document.addEventListener("DOMContentLoaded", function () {
         slides[currentIndex].classList.add("active");
     }
 
-    setInterval(changeSlide, 5000);
-
-    // Efek Mengetik
-    const text = "Selamat datang di website pribadi saya!";
-    let index = 0;
-
-    function typeEffect() {
-        if (index < text.length) {
-            animatedText.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeEffect, 100);
-        }
-    }
-
-    typeEffect();
+    setInterval(changeSlide, 5000); // Ganti gambar setiap 5 detik
 });
