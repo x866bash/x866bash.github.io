@@ -39,22 +39,23 @@
     .hero::before {
       content: "";
       position: absolute; inset: 0;
-      background-image: linear-gradient(to bottom right, rgba(0,0,0,.35), rgba(0,0,0,.6)), url('./images/background.jpg');
+      background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('./images/background.jpg');
       background-size: cover;
       background-position: center;
-      filter: saturate(1.05) contrast(1.05) brightness(.95);
+      filter: saturate(1.05) contrast(1.05) brightness(.85);
       z-index: -2;
       transition: filter 0.4s;
     }
 
     .hero.light::before {
-      background-image: linear-gradient(to bottom right, rgba(255,255,255,.2), rgba(255,255,255,.4)), url('./images/background.jpg');
+      background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('./images/background.jpg');
+      filter: brightness(.9);
     }
 
     .hero::after {
       content: "";
       position: absolute; inset: 0;
-      background: radial-gradient(60% 40% at 50% 70%, transparent, rgba(0,0,0,.55));
+      background: radial-gradient(60% 40% at 50% 70%, transparent, rgba(0,0,0,.6));
       z-index: -1;
     }
 
@@ -99,21 +100,24 @@
     <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
     <div class="container">
       <div class="poem fade-up" id="puisi">
-Kamu adalah 1 1 nya perempuan yang aku sayang, walaupun kita sudah tidak pacaran lagi, 
-kamu lah 1 1 nya orang yang gak bakalan aku lupakan dan aku gk tega ngelakuin apa yang aku mau atau nyebarin aib kamu, 
-mungkin aku sengaja kirim chat ke reza aku udah punya pacar 2 tahun padahal gk ada sama sekali, 
-tapi yaudah gk papa biar kamu bener bener ngejauhin aku dari hidup ku, 
-kan kamu maunya gk di kekang untuk hubungan kita waktu itu, dan kamu banyak banget cowo yang mau sama kamu, 
-lebih baik aku mundur untuk selamanya dari pada aku masih melihat kamu bersama orang lain, 
-apalagi aku sampai tahu jika ada yang buat kamu nangis, 
-pasti akan aku buat dia gk ada di muka bumi ini. 
-jadi, aku akan tinggal kan kamu selamanya. 
-mudah mudahan di kemudian hari kamu bisa mengingatkan semua yang sudah kita lewati bersama.
+Malam datang memeluk bumi,
+  membisikkan rahasia pada angin.
+Di antara bintang yang malu-malu,
+  aku titipkan rinduku padamu.
       </div>
     </div>
     <div class="footer">© <span id="year"></span> Nama Brand Kamu</div>
   </section>
-
+Kamu adalah 1 1 nya perempuan yang aku sayang, walaupun kita sudah tidak pacaran lagi,
+kamu lah 1 1 nya orang yang gak bakalan aku lupakan dan aku gk tega ngelakuin apa yang aku mau atau nyebarin aib kamu,
+mungkin aku sengaja kirim chat ke reza aku udah punya pacar 2 tahun padahal gk ada sama sekali,
+tapi yaudah gk papa biar kamu bener bener ngejauhin aku dari hidup ku,
+kan kamu maunya gk di kekang untuk hubungan kita waktu itu, dan kamu banyak banget cowo yang mau sama kamu,
+lebih baik aku mundur untuk selamanya dari pada aku masih melihat kamu bersama orang lain,
+apalagi aku sampai tahu jika ada yang buat kamu nangis,
+pasti akan aku buat dia gk ada di muka bumi ini.
+jadi, aku akan tinggal kan kamu selamanya.
+mudah mudahan di kemudian hari kamu bisa mengingatkan semua yang sudah kita lewati bersama.
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     function toggleTheme() {
