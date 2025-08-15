@@ -42,10 +42,17 @@
   .btn:hover{ box-shadow:0 0 22px rgba(255,255,255,.8), 0 10px 30px rgba(0,0,0,.7)}
 
   /* ===== Loading Screen (10 detik) ===== */
-  #loading{position:fixed; inset:0; display:none; align-items:center; justify-content:center; gap:14px; background:rgba(0,0,0,.85); z-index:998}
+  #loading{
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center; gap:14px;
+    background:rgba(0,0,0,.85); z-index:998; transition:opacity .8s ease; opacity:1;
+  }
   .spinner{width:22px; height:22px; border:3px solid rgba(255,255,255,.25); border-top-color:#fff; border-radius:50%; animation:spin 1s linear infinite}
-  .loading-text{font-size:18px; opacity:.9; letter-spacing:.3px}
+  .loading-text{font-size:18px; opacity:.9; letter-spacing:.3px; animation:blink 1s infinite}
+  .fade-out{opacity:0}              /* untuk memudar */
+  .stop-blink .loading-text{animation:none}  /* hentikan kedip ketika fade */
+
   @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes blink{0%,100%{opacity:1} 50%{opacity:.4}}
 
   /* ===== Terminal ===== */
   #terminal{
@@ -64,10 +71,10 @@
 
   /* caret untuk typewriter */
   .caret::after{
-    content:""; display:inline-block; width:9px; height:1.2em; margin-left:3px; border-right:2px solid currentColor; animation:blink 1s steps(1,end) infinite;
+    content:""; display:inline-block; width:9px; height:1.2em; margin-left:3px; border-right:2px solid currentColor; animation:blink-caret 1s steps(1,end) infinite;
     transform:translateY(2px)
   }
-  @keyframes blink{50%{border-right-color:transparent}}
+  @keyframes blink-caret{50%{border-right-color:transparent}}
 
   /* ===== File Tree (smooth expand) ===== */
   .tree{width:min(900px, 86vw); margin:10px auto 0; font-family:inherit; line-height:1.55}
@@ -88,11 +95,42 @@
   }
   @keyframes marq{from{transform:translateX(0)} to{transform:translateX(-100%)}}
 
-  /* ===== Credit ===== */
-  .credit{text-align:center; opacity:.7; margin-bottom:28px}
+  /* ===== Tombol Play (gaya sama dengan .btn) ===== */
+  #playBtn{display:block; margin:10px auto 0; }
 
-  /* ===== Helpers (hidden but keep layout) ===== */
-  .visually-hidden{position:absolute!important; clip:rect(1px,1px,1px,1px); padding:0!important; border:0!important; height:1px!important; width:1px!important; overflow:hidden}
+  /* ===== Credit ===== */
+  .credit{text-align:center; opacity:.7; margin:12px 0 28px}
+
+  /* ===== TV Overlay Player ===== */
+  #tvContainer{
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background: rgba(0,0,0,.85);
+    z-index:1200;
+  }
+  .tv-frame{
+    position:relative; width:min(960px, 90vw); height:min(540px, 56vw); /* 16:9 */
+    background:#000; border:4px solid rgba(0,255,255,.7); border-radius:12px;
+    box-shadow:0 0 40px rgba(0,255,255,.5), 0 12px 50px rgba(0,0,0,.9);
+    overflow:hidden;
+  }
+  .tv-scan{ /* animasi TV menyala */
+    position:absolute; inset:0; background:#000; z-index:5; animation: tvOn 1.35s forwards;
+  }
+  @keyframes tvOn{
+    0%{ background:#000; }
+    35%{ background:#fff; transform:scaleY(0.06); opacity:1; }
+    65%{ background:#fff; transform:scaleY(1); opacity:1; }
+    100%{ opacity:0; }
+  }
+  #tvFrame, #tvFrame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0 }
+
+  /* Tutup TV (opsional, biar bisa menutup) */
+  .tv-close{
+    position:absolute; top:10px; right:12px; z-index:6;
+    background:transparent; color:#fff; border:2px solid #fff; border-radius:10px; padding:6px 10px; cursor:pointer;
+    box-shadow:0 0 16px rgba(255,255,255,.55), 0 8px 24px rgba(0,0,0,.6);
+  }
+  .tv-close:hover{ box-shadow:0 0 22px rgba(255,255,255,.8), 0 10px 30px rgba(0,0,0,.7)}
 
   /* mobile tweak */
   @media (max-width:480px){
@@ -137,12 +175,12 @@
   <div class="folder" id="folderToggle" tabindex="0">MY-ROOM/</div>
   <div class="content-wrapper" id="treeWrap" aria-hidden="true">
     <div class="content" id="treeContent">
-      ├── <a href="#src">src/</a><br/>
-      │ &nbsp; ├── <a href="#app">/app.py</a><br/>
-      │ &nbsp; ├── <a href="#db">/db.py</a><br/>
-      ├── <a href="#src">src/</a><br/>
-      │ &nbsp; ├── <a href="#app">/app.py</a><br/>
-      │ &nbsp; ├── <a href="#db">/db.py</a><br/>
+      ├── src/<br/>
+      │ &nbsp; ├── app.py<br/>
+      │ &nbsp; ├── db.py<br/>
+      ├── src/<br/>
+      │ &nbsp; ├── app.py<br/>
+      │ &nbsp; ├── db.py<br/>
     </div>
   </div>
 </div>
@@ -152,18 +190,32 @@
 
 <!-- Marquee -->
 <div class="marquee">
-  <span>Selamat menikmati makanan yang sudah di sediakan, semoga nyaman tempatnya, dan enak makanannya, selamat makan yah...!!!</span>
+  <span>Selamat menikmati makanan yang sudah di sediakan, semoga enak makanannya, dan enak, selamat makan yah...!!!</span>
 </div>
+
+<!-- Tombol PLAY -->
+<button id="playBtn" class="btn" aria-label="Putar playlist">PLAY</button>
 
 <!-- Credit -->
 <p class="credit">Credit by : Dani</p>
 
+<!-- TV Overlay Player -->
+<div id="tvContainer" role="dialog" aria-modal="true" aria-label="YouTube Player">
+  <div class="tv-frame">
+    <button class="tv-close" id="tvClose" aria-label="Tutup pemutar">Tutup</button>
+    <div class="tv-scan" id="tvScan"></div>
+    <div id="tvFrame" aria-hidden="true"></div>
+  </div>
+</div>
+
 <!-- Audio (lokal + fallback URL, boleh diganti) -->
 <audio id="glassSfx" preload="auto">
   <source src="glass-break.mp3" type="audio/mpeg">
-  <!-- fallback (ganti ke url favoritmu jika perlu) -->
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_21d8e34aa5.mp3" type="audio/mpeg">
 </audio>
+
+<!-- YouTube Iframe API -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
 /* =========================
@@ -172,7 +224,7 @@
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 
 /* =========================
-   BACKGROUND: awan + petir
+   BACKGROUND: awan + petir (canvas)
 ========================= */
 const bg = document.getElementById('bgCanvas');
 const bctx = bg.getContext('2d');
@@ -181,33 +233,24 @@ function resizeBG(){ W=bg.width=innerWidth; H=bg.height=innerHeight }
 addEventListener('resize', resizeBG); resizeBG();
 
 function makeCloud(){
-  // cloud = kumpulan blob
   const parts = Math.floor(4+Math.random()*5);
   const blobs=[];
   const y = Math.random()*H*0.5 + 20;
-  let x = Math.random()*W;
   const speed = .15 + Math.random()*.35;
+  let x = Math.random()*W;
   for(let i=0;i<parts;i++){
-    blobs.push({
-      x: x + i*30 + Math.random()*40,
-      y: y + (Math.random()*40-20),
-      r: 50+Math.random()*90
-    });
+    blobs.push({ x: x + i*30 + Math.random()*40, y: y + (Math.random()*40-20), r: 50+Math.random()*90 });
   }
   return {blobs, speed};
 }
 for(let i=0;i<6;i++) clouds.push(makeCloud());
 
 function spawnBolt(){
-  // Petir zigzag sederhana
   const x = Math.random()*W;
   const seg = 12 + Math.floor(Math.random()*8);
   const path = [{x, y:0}];
   for(let i=1;i<=seg;i++){
-    path.push({
-      x: x + (Math.random()*60-30),
-      y: (H/seg)*i + Math.random()*10
-    });
+    path.push({ x: x + (Math.random()*60-30), y: (H/seg)*i + Math.random()*10 });
   }
   bolts.push({path, life:0});
 }
@@ -220,15 +263,11 @@ function drawBG(){
   bctx.fillStyle = 'rgba(255,255,255,0.10)';
   clouds.forEach(c=>{
     c.blobs.forEach(p=>{
-      bctx.beginPath();
-      bctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      bctx.fill();
+      bctx.beginPath(); bctx.arc(p.x, p.y, p.r, 0, Math.PI*2); bctx.fill();
       p.x -= c.speed;
     });
-    // reset saat keluar kiri
     if(c.blobs[c.blobs.length-1].x + c.blobs[c.blobs.length-1].r < 0){
-      const n = makeCloud();
-      c.blobs = n.blobs; c.speed = n.speed;
+      const n = makeCloud(); c.blobs = n.blobs; c.speed = n.speed;
     }
   });
 
@@ -238,11 +277,8 @@ function drawBG(){
     const alpha = 1 - bolt.life/14;
     bctx.strokeStyle = `rgba(255,255,255,${alpha})`;
     bctx.lineWidth = 2;
-    bctx.beginPath();
-    bctx.moveTo(bolt.path[0].x, bolt.path[0].y);
-    for(let j=1;j<bolt.path.length;j++){
-      bctx.lineTo(bolt.path[j].x, bolt.path[j].y);
-    }
+    bctx.beginPath(); bctx.moveTo(bolt.path[0].x, bolt.path[0].y);
+    for(let j=1;j<bolt.path.length;j++) bctx.lineTo(bolt.path[j].x, bolt.path[j].y);
     bctx.stroke();
     bolt.life++;
     if(bolt.life>14) bolts.splice(i,1);
@@ -266,110 +302,132 @@ addEventListener('resize', resizeSh); resizeSh();
 
 let shards = [];
 
+/* Shards dari rect popup — segitiga acak dengan pantulan biru-hijau */
 function createShardsFromRect(rect){
   shards.length=0;
-  const colors = [
-    [220,240,255], // biru pucat
-    [255,255,255], // putih pucat
-    [200,220,230]  // abu kaca
-  ];
-  const PIECES = 44; // jumlah pecahan
+  const PIECES = 48;
   for(let i=0;i<PIECES;i++){
     const size = 10 + Math.random()*28;
     const alpha = .45 + Math.random()*.35;
-    const col = colors[(Math.random()*colors.length)|0];
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top  + rect.height/2;
+    const px = rect.left + Math.random()*rect.width;
+    const py = rect.top  + Math.random()*rect.height;
+    const ang = Math.atan2(py-cy, px-cx) + (Math.random()*0.6 - 0.3);
+    const spd = 6 + Math.random()*6;
+
     shards.push({
-      x: rect.left + Math.random()*rect.width,
-      y: rect.top  + Math.random()*rect.height,
-      dx: (Math.random()-.5)*13,
-      dy: (Math.random()-.5)*13,
+      x: px, y: py,
+      dx: Math.cos(ang)*spd,
+      dy: Math.sin(ang)*spd - 2,
       rot: Math.random()*Math.PI*2,
       drot: (Math.random()-.5)*.28,
-      g: .32 + Math.random()*.18,
-      air: .992, // gesekan
+      g: .36 + Math.random()*.18,
+      air: .992,
+      bounce: .52 + Math.random()*.10,
       size,
       alpha,
-      col
+      gradAngle: Math.random()*Math.PI*2,
+      c1a: 0.20 + Math.random()*0.30,
+      c2a: 0.12 + Math.random()*0.30,
+      fading: false
     });
   }
 }
 
+/* Gambar satu shard */
 function drawShard(s){
   sctx.save();
   sctx.translate(s.x, s.y);
   sctx.rotate(s.rot);
 
-  // segitiga tak beraturan
+  const a = s.size, b = s.size*0.45, c = s.size*0.95;
   sctx.beginPath();
   sctx.moveTo(0, 0);
-  sctx.lineTo(s.size,  s.size*.45);
-  sctx.lineTo(-s.size*.55, s.size*.95);
+  sctx.lineTo(a,  b);
+  sctx.lineTo(-s.size*0.55, c);
   sctx.closePath();
 
-  // isi (kaca)
-  sctx.fillStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${s.alpha})`;
+  const gx = Math.cos(s.gradAngle), gy = Math.sin(s.gradAngle);
+  const g = sctx.createLinearGradient(-a*0.6*gx, -a*0.6*gy, a*0.6*gx, a*0.6*gy);
+  g.addColorStop(0, `rgba(0,255,255,${s.c1a * s.alpha})`);
+  g.addColorStop(1, `rgba(0,255,128,${s.c2a * s.alpha})`);
+  sctx.fillStyle = g;
   sctx.fill();
 
-  // highlight tipis
-  sctx.strokeStyle = `rgba(255,255,255,${Math.min(1, s.alpha+.15)})`;
+  sctx.strokeStyle = `rgba(255,255,255,${Math.min(1, s.alpha+.18)})`;
   sctx.lineWidth = 1;
   sctx.stroke();
 
-  // garis highlight internal kecil
   sctx.beginPath();
   sctx.moveTo(-s.size*.2, s.size*.2);
   sctx.lineTo(s.size*.35, s.size*.05);
-  sctx.strokeStyle = `rgba(255,255,255,${s.alpha*.6})`;
+  sctx.strokeStyle = `rgba(255,255,255,${s.alpha*.55})`;
   sctx.lineWidth = .6;
   sctx.stroke();
 
   sctx.restore();
 }
 
+/* Animasi pecahan — gravitasi, pantulan, fade-out */
 function animateShatter(){
   sctx.clearRect(0,0,shCanvas.width, shCanvas.height);
+
+  const floor = innerHeight - 18;
+  const leftWall = 0, rightWall = innerWidth;
+
   for(let i=shards.length-1;i>=0;i--){
     const s = shards[i];
+
     drawShard(s);
+
     s.x += s.dx;
     s.y += s.dy;
     s.dy += s.g;
     s.dx *= s.air;
     s.rot += s.drot;
-    s.alpha -= .0065;
-    if(s.alpha<=0 || s.y-100>innerHeight) shards.splice(i,1);
+
+    if(s.y > floor){
+      s.y = floor;
+      s.dy *= -s.bounce;
+      s.dx *= 0.9;
+      s.drot *= 0.85;
+      if(Math.abs(s.dy) < 0.9) s.fading = true;
+    }
+    if(s.x < leftWall){ s.x = leftWall; s.dx *= -0.6; }
+    if(s.x > rightWall){ s.x = rightWall; s.dx *= -0.6; }
+
+    if(s.fading){ s.alpha -= 0.01; } else { s.alpha -= 0.0035; }
+
+    if(s.alpha <= 0){ shards.splice(i,1); }
   }
+
   if(shards.length>0) requestAnimationFrame(animateShatter);
   else shCanvas.style.display='none';
 }
 
 enterBtn.addEventListener('click', async ()=>{
-  // Tampilkan loading dulu 10 detik
-  popup.style.display='none';
   loading.style.display='flex';
+  loading.classList.remove('fade-out','stop-blink');
+  loading.style.opacity='1';
 
-  // siapkan suara
-  const glassSfx = document.getElementById('glassSfx');
+  const rect = glassCard.getBoundingClientRect();
 
   setTimeout(async ()=>{
-    // ambil rect popup (posisi kaca)
-    const r = glassCard.getBoundingClientRect();
     shCanvas.style.display='block';
-    createShardsFromRect(r);
+    createShardsFromRect(rect);
 
-    // mainkan suara (fallback bila perlu)
-    try{ await glassSfx.play(); }catch(e){
-      // jika autoplay diblok, coba pakai play setelah interaksi sudah terjadi (sudah klik)
-      glassSfx.muted=false;
-      try{ await glassSfx.play(); }catch(_e){}
-    }
+    const glassSfx = document.getElementById('glassSfx');
+    try{ await glassSfx.play(); }catch(e){ try{ glassSfx.muted=false; await glassSfx.play(); }catch(_e){} }
 
-    loading.style.display='none';
+    popup.style.display='none';
     animateShatter();
 
-    // lalu tampilkan terminal
+    loading.classList.add('stop-blink','fade-out');
+    setTimeout(()=>{ loading.style.display='none'; }, 800);
+
     showTerminal();
-  }, 10000); // 10 detik
+  }, 10000);
 });
 
 /* =========================
@@ -393,7 +451,7 @@ function showTerminal(){
 }
 
 function typewriter(arr, speed=50){
-  termBody.innerHTML = "";
+  termBody.textContent = "";
   let li=0, ci=0;
   termBody.classList.add('caret');
   (function tick(){
@@ -439,17 +497,14 @@ function drawClock(){
   cctx.save();
   cctx.translate(w/2,h/2);
 
-  // face
   const grad = cctx.createRadialGradient(0,0, r*.05, 0,0, r*1.08);
   grad.addColorStop(0,'#1a1a1a'); grad.addColorStop(1,'#000');
   cctx.fillStyle = grad;
   cctx.beginPath(); cctx.arc(0,0,r*1.02,0,Math.PI*2); cctx.fill();
 
-  // bezel
   cctx.strokeStyle='rgba(255,255,255,.2)';
   cctx.lineWidth=6; cctx.beginPath(); cctx.arc(0,0,r*1.02,0,Math.PI*2); cctx.stroke();
 
-  // ticks
   for(let i=0;i<60;i++){
     cctx.rotate(Math.PI/30);
     cctx.beginPath();
@@ -465,7 +520,6 @@ function drawClock(){
   let mn = now.getMinutes();
   let sc = now.getSeconds();
 
-  // hands
   function hand(angle, len, width, color){
     cctx.save();
     cctx.rotate(angle);
@@ -481,7 +535,6 @@ function drawClock(){
   hand(minA, r*0.68, 4, 'rgba(255,255,255,.9)');
   hand(secA, r*0.75, 2, '#e33');
 
-  // center cap
   cctx.fillStyle='#e33';
   cctx.beginPath(); cctx.arc(0,0,5,0,Math.PI*2); cctx.fill();
 
@@ -490,8 +543,75 @@ function drawClock(){
 setInterval(drawClock, 1000); drawClock();
 
 /* =========================
-   SAFETY: Resize tree max-height after images/fonts settle
+   YOUTUBE TV OVERLAY (Play + TV ON + Autoplay Next)
 ========================= */
+const playBtn = document.getElementById('playBtn');
+const tvContainer = document.getElementById('tvContainer');
+const tvScan = document.getElementById('tvScan');
+const tvClose = document.getElementById('tvClose');
+
+let ytPlayer = null;
+let currentIndex = 0;
+/* Ganti dengan video favoritmu (ID YouTube) */
+const playlist = [
+  "M7lc1UVf-VE", // YouTube IFrame API Demo (contoh)
+  "Zi_XLOBDo_Y", // Coldplay - Viva La Vida (contoh)
+  "fLexgOxsZu0"  // Maroon 5 - Sugar (contoh)
+];
+
+function ensurePlayer(startIndex=0){
+  currentIndex = startIndex;
+  if(ytPlayer){
+    ytPlayer.loadVideoById({videoId: playlist[currentIndex], suggestedQuality: "large"});
+    return;
+  }
+  ytPlayer = new YT.Player('tvFrame', {
+    videoId: playlist[currentIndex],
+    playerVars: {
+      autoplay: 1,
+      controls: 1,
+      modestbranding: 1,
+      rel: 0,
+      playsinline: 1
+    },
+    events: {
+      onReady: (e)=>{ e.target.playVideo(); },
+      onStateChange: (e)=>{
+        if(e.data === YT.PlayerState.ENDED){
+          currentIndex = (currentIndex + 1) % playlist.length;
+          ytPlayer.loadVideoById({videoId: playlist[currentIndex], suggestedQuality: "large"});
+        }
+      }
+    }
+  });
+}
+
+playBtn.addEventListener('click', ()=>{
+  tvContainer.style.display = 'flex';
+  // reset dan mainkan animasi TV ON
+  tvScan.style.animation = 'none';
+  void tvScan.offsetWidth; // reflow untuk restart animasi
+  tvScan.style.animation = 'tvOn 1.35s forwards';
+  // sedikit delay agar nyala TV selesai dulu baru tampil video
+  setTimeout(()=> ensurePlayer(currentIndex), 700);
+});
+
+tvClose.addEventListener('click', ()=>{
+  tvContainer.style.display = 'none';
+  if(ytPlayer){
+    try{ ytPlayer.stopVideo(); }catch(e){}
+  }
+});
+
+/* API callback global dari YouTube (harus tersedia di window) */
+window.onYouTubeIframeAPIReady = function(){
+  // player baru dibuat saat tombol PLAY diklik (ensurePlayer)
+};
+
+/* =========================
+   SAFETY: Resize tree max-height after load
+========================= */
+const treeWrap = document.getElementById('treeWrap'); // pastikan terdefinisi sebelum dipakai di load
 addEventListener('load', ()=>{
   if(treeWrap.style.maxHeight && treeWrap.style.maxHeight!=='0px'){
     treeWrap.style.maxHeight = treeWrap.scrollHeight + 'px';
