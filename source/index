@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MY ROOM</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background:#000; color:#fff; overflow-x:hidden}
+
+  /* ===== Background Canvas (awan + petir) ===== */
+  #bgCanvas{position:fixed; inset:0; z-index:-2; display:block; background:#000}
+
+  /* ===== Glass Shatter Canvas ===== */
+  #glassCanvas{position:fixed; inset:0; z-index:1000; pointer-events:none; display:none}
+
+  /* ===== Popup Welcome (kaca transparan “cermin”) ===== */
+  #welcomePopup{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.4); z-index:999}
+  .glass-card{
+    position:relative; padding:28px 36px; border-radius:14px;
+    background:rgba(255,255,255,.10); backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.18);
+    overflow:hidden; text-align:center; min-width:280px;
+  }
+  /* efek pantulan “cermin” */
+  .glass-card::before{
+    content:""; position:absolute; inset:-40% -10% auto -10%; height:160%;
+    background:linear-gradient(60deg, rgba(255,255,255,.35) 0%, rgba(255,255,255,.06) 35%, rgba(255,255,255,0) 60%);
+    transform:translateY(-20%) rotate(6deg); pointer-events:none; filter:blur(1px);
+  }
+  .glass-title{font-size:24px; letter-spacing:.5px; margin-bottom:14px}
+  .btn{
+    appearance:none; background:transparent; color:#fff; border:2px solid #fff;
+    padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:700;
+    box-shadow:0 0 16px rgba(255,255,255,.55), 0 8px 24px rgba(0,0,0,.6);
+    transition: transform .08s ease, box-shadow .2s ease;
+  }
+  .btn:active{ transform:translateY(1px) scale(.99)}
+  .btn:hover{ box-shadow:0 0 22px rgba(255,255,255,.8), 0 10px 30px rgba(0,0,0,.7)}
+
+  /* ===== Loading Screen (10 detik) ===== */
+  #loading{position:fixed; inset:0; display:none; align-items:center; justify-content:center; gap:14px; background:rgba(0,0,0,.85); z-index:998}
+  .spinner{width:22px; height:22px; border:3px solid rgba(255,255,255,.25); border-top-color:#fff; border-radius:50%; animation:spin 1s linear infinite}
+  .loading-text{font-size:18px; opacity:.9; letter-spacing:.3px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ===== Terminal ===== */
+  #terminal{
+    width:min(900px, 86vw); margin:90px auto 16px; border-radius:14px; overflow:hidden;
+    background:#0d0f0f; color:#00ff88; box-shadow: 0 0 28px rgba(0,255,136,.25), 0 6px 40px rgba(0,0,0,.5);
+    transform: translateY(-20px); opacity:0; transition: transform .6s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
+    display:none;
+  }
+  #terminal.show{display:block; transform:translateY(0); opacity:1}
+  .term-bar{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:#151819; border-bottom:1px solid rgba(255,255,255,.06)}
+  .term-title{opacity:.8; font-size:12px; letter-spacing:.3px}
+  .term-body{padding:14px 14px 18px; min-height:160px; white-space:pre-wrap}
+  .term-btn{border:1px solid currentColor; background:transparent; color:inherit; padding:6px 10px; border-radius:8px; cursor:pointer}
+  #terminal.light{background:#f7f7f7; color:#101010; box-shadow: 0 0 18px rgba(0,0,0,.25)}
+  #terminal.light .term-bar{background:#e9e9e9; border-bottom-color:rgba(0,0,0,.08)}
+
+  /* caret untuk typewriter */
+  .caret::after{
+    content:""; display:inline-block; width:9px; height:1.2em; margin-left:3px; border-right:2px solid currentColor; animation:blink 1s steps(1,end) infinite;
+    transform:translateY(2px)
+  }
+  @keyframes blink{50%{border-right-color:transparent}}
+
+  /* ===== File Tree (smooth expand) ===== */
+  .tree{width:min(900px, 86vw); margin:10px auto 0; font-family:inherit; line-height:1.55}
+  .tree .folder{cursor:pointer; color:#4aefff; user-select:none; display:inline-block; padding:4px 6px; border-radius:6px}
+  .tree .folder:hover{background:rgba(74,239,255,.08)}
+  .tree .content-wrapper{overflow:hidden; max-height:0; transition:max-height .5s ease}
+  .tree .content{padding:8px 8px 0 8px; color:#cfe; opacity:.9}
+
+  /* ===== Jam Analog Classic ===== */
+  #clockWrap{width:min(320px, 80vw); margin:18px auto 0; filter: drop-shadow(0 6px 20px rgba(255,255,255,.15)) drop-shadow(0 0 6px rgba(255,255,255,.25))}
+  #clockCanvas{width:100%; height:auto; display:block; aspect-ratio:1/1; background: radial-gradient(ellipse at center, #0b0b0b 0%, #000 100%); border-radius:16px; }
+
+  /* ===== Marquee (api shadow) ===== */
+  .marquee{position:relative; overflow:hidden; white-space:nowrap; width:100%; margin:20px 0}
+  .marquee span{
+    display:inline-block; padding-left:100%; animation:marq 22s linear infinite;
+    text-shadow: 0 0 2px #fdd, 0 0 6px #ff9, 0 0 12px #fc4, 0 0 22px #f80, 0 0 38px #f30;
+  }
+  @keyframes marq{from{transform:translateX(0)} to{transform:translateX(-100%)}}
+
+  /* ===== Credit ===== */
+  .credit{text-align:center; opacity:.7; margin-bottom:28px}
+
+  /* ===== Helpers (hidden but keep layout) ===== */
+  .visually-hidden{position:absolute!important; clip:rect(1px,1px,1px,1px); padding:0!important; border:0!important; height:1px!important; width:1px!important; overflow:hidden}
+
+  /* mobile tweak */
+  @media (max-width:480px){
+    .glass-card{padding:22px}
+    .glass-title{font-size:20px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Background animation -->
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<!-- Glass shatter overlay -->
+<canvas id="glassCanvas" aria-hidden="true"></canvas>
+
+<!-- Welcome Popup -->
+<section id="welcomePopup" aria-modal="true" role="dialog" aria-labelledby="wlcm-title">
+  <div class="glass-card" id="glassCard">
+    <h1 class="glass-title" id="wlcm-title">Selamat Datang</h1>
+    <button class="btn" id="enterBtn" aria-label="Masuk ke ruangan">Masuk</button>
+  </div>
+</section>
+
+<!-- Loading -->
+<section id="loading" aria-live="polite">
+  <div class="spinner" aria-hidden="true"></div>
+  <div class="loading-text">Memuat...</div>
+</section>
+
+<!-- Terminal -->
+<section id="terminal" aria-label="Terminal">
+  <div class="term-bar">
+    <div class="term-title">/home/guest/my-room</div>
+    <button id="themeToggle" class="term-btn" title="Ganti tema">Dark / Light</button>
+  </div>
+  <div class="term-body" id="termBody"></div>
+</section>
+
+<!-- File Tree -->
+<div class="tree" aria-label="File List">
+  <div class="folder" id="folderToggle" tabindex="0">MY-ROOM/</div>
+  <div class="content-wrapper" id="treeWrap" aria-hidden="true">
+    <div class="content" id="treeContent">
+      ├── <a href="#src">src/</a><br/>
+      │ &nbsp; ├── <a href="#app">app.py</a><br/>
+      │ &nbsp; ├── <a href="#db">db.py</a><br/>
+      ├── <a href="#src">src/</a><br/>
+      │ &nbsp; ├── <a href="#app">app.py</a><br/>
+      │ &nbsp; ├── <a href="#db">db.py</a><br/>
+    </div>
+  </div>
+</div>
+
+<!-- Clock -->
+<div id="clockWrap"><canvas id="clockCanvas" width="500" height="500"></canvas></div>
+
+<!-- Marquee -->
+<div class="marquee">
+  <span>Selamat menikmati makanan yang sudah di sediakan, semoga enak makanannya, dan enak, selamat makan yah...!!!</span>
+</div>
+
+<!-- Credit -->
+<p class="credit">Credit by : Dani</p>
+
+<!-- Audio (lokal + fallback URL, boleh diganti) -->
+<audio id="glassSfx" preload="auto">
+  <source src="glass-break.mp3" type="audio/mpeg">
+  <!-- fallback (ganti ke url favoritmu jika perlu) -->
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_21d8e34aa5.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* =========================
+   UTIL
+========================= */
+const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+
+/* =========================
+   BACKGROUND: awan + petir
+========================= */
+const bg = document.getElementById('bgCanvas');
+const bctx = bg.getContext('2d');
+let W,H, clouds=[], bolts=[];
+function resizeBG(){ W=bg.width=innerWidth; H=bg.height=innerHeight }
+addEventListener('resize', resizeBG); resizeBG();
+
+function makeCloud(){
+  // cloud = kumpulan blob
+  const parts = Math.floor(4+Math.random()*5);
+  const blobs=[];
+  const y = Math.random()*H*0.5 + 20;
+  let x = Math.random()*W;
+  const speed = .15 + Math.random()*.35;
+  for(let i=0;i<parts;i++){
+    blobs.push({
+      x: x + i*30 + Math.random()*40,
+      y: y + (Math.random()*40-20),
+      r: 50+Math.random()*90
+    });
+  }
+  return {blobs, speed};
+}
+for(let i=0;i<6;i++) clouds.push(makeCloud());
+
+function spawnBolt(){
+  // Petir zigzag sederhana
+  const x = Math.random()*W;
+  const seg = 12 + Math.floor(Math.random()*8);
+  const path = [{x, y:0}];
+  for(let i=1;i<=seg;i++){
+    path.push({
+      x: x + (Math.random()*60-30),
+      y: (H/seg)*i + Math.random()*10
+    });
+  }
+  bolts.push({path, life:0});
+}
+setInterval(spawnBolt, 4200 + Math.random()*1800);
+
+function drawBG(){
+  bctx.clearRect(0,0,W,H);
+
+  // awan
+  bctx.fillStyle = 'rgba(255,255,255,0.10)';
+  clouds.forEach(c=>{
+    c.blobs.forEach(p=>{
+      bctx.beginPath();
+      bctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      bctx.fill();
+      p.x -= c.speed;
+    });
+    // reset saat keluar kiri
+    if(c.blobs[c.blobs.length-1].x + c.blobs[c.blobs.length-1].r < 0){
+      const n = makeCloud();
+      c.blobs = n.blobs; c.speed = n.speed;
+    }
+  });
+
+  // petir
+  for(let i=bolts.length-1;i>=0;i--){
+    const bolt = bolts[i];
+    const alpha = 1 - bolt.life/14;
+    bctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+    bctx.lineWidth = 2;
+    bctx.beginPath();
+    bctx.moveTo(bolt.path[0].x, bolt.path[0].y);
+    for(let j=1;j<bolt.path.length;j++){
+      bctx.lineTo(bolt.path[j].x, bolt.path[j].y);
+    }
+    bctx.stroke();
+    bolt.life++;
+    if(bolt.life>14) bolts.splice(i,1);
+  }
+
+  requestAnimationFrame(drawBG);
+}
+drawBG();
+
+/* =========================
+   POPUP → LOADING (10s) → SHATTER → TERMINAL
+========================= */
+const popup = document.getElementById('welcomePopup');
+const glassCard = document.getElementById('glassCard');
+const enterBtn = document.getElementById('enterBtn');
+const loading = document.getElementById('loading');
+const shCanvas = document.getElementById('glassCanvas');
+const sctx = shCanvas.getContext('2d');
+function resizeSh(){ shCanvas.width=innerWidth; shCanvas.height=innerHeight }
+addEventListener('resize', resizeSh); resizeSh();
+
+let shards = [];
+
+function createShardsFromRect(rect){
+  shards.length=0;
+  const colors = [
+    [220,240,255], // biru pucat
+    [255,255,255], // putih pucat
+    [200,220,230]  // abu kaca
+  ];
+  const PIECES = 44; // jumlah pecahan
+  for(let i=0;i<PIECES;i++){
+    const size = 10 + Math.random()*28;
+    const alpha = .45 + Math.random()*.35;
+    const col = colors[(Math.random()*colors.length)|0];
+    shards.push({
+      x: rect.left + Math.random()*rect.width,
+      y: rect.top  + Math.random()*rect.height,
+      dx: (Math.random()-.5)*13,
+      dy: (Math.random()-.5)*13,
+      rot: Math.random()*Math.PI*2,
+      drot: (Math.random()-.5)*.28,
+      g: .32 + Math.random()*.18,
+      air: .992, // gesekan
+      size,
+      alpha,
+      col
+    });
+  }
+}
+
+function drawShard(s){
+  sctx.save();
+  sctx.translate(s.x, s.y);
+  sctx.rotate(s.rot);
+
+  // segitiga tak beraturan
+  sctx.beginPath();
+  sctx.moveTo(0, 0);
+  sctx.lineTo(s.size,  s.size*.45);
+  sctx.lineTo(-s.size*.55, s.size*.95);
+  sctx.closePath();
+
+  // isi (kaca)
+  sctx.fillStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${s.alpha})`;
+  sctx.fill();
+
+  // highlight tipis
+  sctx.strokeStyle = `rgba(255,255,255,${Math.min(1, s.alpha+.15)})`;
+  sctx.lineWidth = 1;
+  sctx.stroke();
+
+  // garis highlight internal kecil
+  sctx.beginPath();
+  sctx.moveTo(-s.size*.2, s.size*.2);
+  sctx.lineTo(s.size*.35, s.size*.05);
+  sctx.strokeStyle = `rgba(255,255,255,${s.alpha*.6})`;
+  sctx.lineWidth = .6;
+  sctx.stroke();
+
+  sctx.restore();
+}
+
+function animateShatter(){
+  sctx.clearRect(0,0,shCanvas.width, shCanvas.height);
+  for(let i=shards.length-1;i>=0;i--){
+    const s = shards[i];
+    drawShard(s);
+    s.x += s.dx;
+    s.y += s.dy;
+    s.dy += s.g;
+    s.dx *= s.air;
+    s.rot += s.drot;
+    s.alpha -= .0065;
+    if(s.alpha<=0 || s.y-100>innerHeight) shards.splice(i,1);
+  }
+  if(shards.length>0) requestAnimationFrame(animateShatter);
+  else shCanvas.style.display='none';
+}
+
+enterBtn.addEventListener('click', async ()=>{
+  // Tampilkan loading dulu 10 detik
+  popup.style.display='none';
+  loading.style.display='flex';
+
+  // siapkan suara
+  const glassSfx = document.getElementById('glassSfx');
+
+  setTimeout(async ()=>{
+    // ambil rect popup (posisi kaca)
+    const r = glassCard.getBoundingClientRect();
+    shCanvas.style.display='block';
+    createShardsFromRect(r);
+
+    // mainkan suara (fallback bila perlu)
+    try{ await glassSfx.play(); }catch(e){
+      // jika autoplay diblok, coba pakai play setelah interaksi sudah terjadi (sudah klik)
+      glassSfx.muted=false;
+      try{ await glassSfx.play(); }catch(_e){}
+    }
+
+    loading.style.display='none';
+    animateShatter();
+
+    // lalu tampilkan terminal
+    showTerminal();
+  }, 10000); // 10 detik
+});
+
+/* =========================
+   TERMINAL (slide + typewriter + theme)
+========================= */
+const terminal = document.getElementById('terminal');
+const termBody = document.getElementById('termBody');
+const themeToggle = document.getElementById('themeToggle');
+
+const lines = [
+  "WELCOME TO MY ROOM",
+  "selamat datang di ruangan saya",
+  "ini adalah ruangan yang gk ada apa apa nya di banding kalian yang banyak kreasi,",
+  "saya cuma pelajar yang baru buat scrip simple dengan bantuan ChatGPT,",
+  "jika suka dengan ruangan saya bisa yaudah haveFUN ye nO coMMEnt ye."
+];
+
+function showTerminal(){
+  terminal.classList.add('show');
+  typewriter(lines, 46);
+}
+
+function typewriter(arr, speed=50){
+  termBody.innerHTML = "";
+  let li=0, ci=0;
+  termBody.classList.add('caret');
+  (function tick(){
+    if(li>=arr.length){ termBody.classList.remove('caret'); return; }
+    if(ci < arr[li].length){
+      termBody.textContent += arr[li][ci++];
+      setTimeout(tick, speed);
+    }else{
+      termBody.textContent += "\n";
+      li++; ci=0;
+      setTimeout(tick, 360);
+    }
+  })();
+}
+
+themeToggle.addEventListener('click', ()=> terminal.classList.toggle('light'));
+
+/* =========================
+   FILE TREE (smooth expand on click)
+========================= */
+const folderToggle = document.getElementById('folderToggle');
+const treeWrap = document.getElementById('treeWrap');
+folderToggle.addEventListener('click', ()=>{
+  const open = treeWrap.style.maxHeight && treeWrap.style.maxHeight !== '0px';
+  if(open){
+    treeWrap.style.maxHeight='0px';
+    treeWrap.setAttribute('aria-hidden','true');
+  }else{
+    treeWrap.style.maxHeight = treeWrap.scrollHeight + 'px';
+    treeWrap.setAttribute('aria-hidden','false');
+  }
+});
+folderToggle.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); folderToggle.click(); }});
+
+/* =========================
+   JAM ANALOG CLASSIC (canvas)
+========================= */
+const clock = document.getElementById('clockCanvas');
+const cctx = clock.getContext('2d');
+function drawClock(){
+  const w = clock.width, h = clock.height, r = Math.min(w,h)/2 - 26;
+  cctx.clearRect(0,0,w,h);
+  cctx.save();
+  cctx.translate(w/2,h/2);
+
+  // face
+  const grad = cctx.createRadialGradient(0,0, r*.05, 0,0, r*1.08);
+  grad.addColorStop(0,'#1a1a1a'); grad.addColorStop(1,'#000');
+  cctx.fillStyle = grad;
+  cctx.beginPath(); cctx.arc(0,0,r*1.02,0,Math.PI*2); cctx.fill();
+
+  // bezel
+  cctx.strokeStyle='rgba(255,255,255,.2)';
+  cctx.lineWidth=6; cctx.beginPath(); cctx.arc(0,0,r*1.02,0,Math.PI*2); cctx.stroke();
+
+  // ticks
+  for(let i=0;i<60;i++){
+    cctx.rotate(Math.PI/30);
+    cctx.beginPath();
+    cctx.moveTo(0,-r*0.90);
+    cctx.lineWidth = (i%5===0)? 4:1.6;
+    cctx.strokeStyle = (i%5===0)? 'rgba(255,255,255,.9)':'rgba(255,255,255,.5)';
+    cctx.lineTo(0,-r*0.84);
+    cctx.stroke();
+  }
+
+  const now = new Date();
+  let hr = now.getHours()%12;
+  let mn = now.getMinutes();
+  let sc = now.getSeconds();
+
+  // hands
+  function hand(angle, len, width, color){
+    cctx.save();
+    cctx.rotate(angle);
+    cctx.strokeStyle=color; cctx.lineWidth=width; cctx.lineCap='round';
+    cctx.beginPath(); cctx.moveTo(0, r*0.1); cctx.lineTo(0, -len); cctx.stroke();
+    cctx.restore();
+  }
+  const secA = sc*Math.PI/30;
+  const minA = (mn+sc/60)*Math.PI/30;
+  const hrA  = (hr+mn/60)*Math.PI/6;
+
+  hand(hrA,  r*0.50, 6, 'rgba(255,255,255,.95)');
+  hand(minA, r*0.68, 4, 'rgba(255,255,255,.9)');
+  hand(secA, r*0.75, 2, '#e33');
+
+  // center cap
+  cctx.fillStyle='#e33';
+  cctx.beginPath(); cctx.arc(0,0,5,0,Math.PI*2); cctx.fill();
+
+  cctx.restore();
+}
+setInterval(drawClock, 1000); drawClock();
+
+/* =========================
+   SAFETY: Resize tree max-height after images/fonts settle
+========================= */
+addEventListener('load', ()=>{
+  if(treeWrap.style.maxHeight && treeWrap.style.maxHeight!=='0px'){
+    treeWrap.style.maxHeight = treeWrap.scrollHeight + 'px';
+  }
+});
+</script>
+</body>
+</html>
