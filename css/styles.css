@@ -1,0 +1,170 @@
+/* Slideshow Background */
+.slideshow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.slideshow {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+/* Hanya slide aktif yang terlihat */
+.slide.active {
+    opacity: 1;
+}
+
+/* Popup Full-Screen */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Popup Background */
+.popup-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.popup-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5; /* Bisa diatur lebih terang/gelap */
+}
+
+/* Popup Tersembunyi */
+.popup.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Popup Content - Agar Tombol Muncul */
+.popup-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6); /* Latar belakang tombol agar terlihat jelas */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Tombol Masuk */
+#enter-btn {
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#enter-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/* Navigasi */
+nav {
+    display: none;
+    background: #1a1a1a;
+    padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+nav ul li {
+    position: relative;
+    margin: 0 15px;
+}
+
+/* Kotak Navigasi */
+.nav-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 50px;
+    background: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: background 0.3s;
+}
+
+.nav-box:hover {
+    background: #444;
+}
+
+/* Tombol Navigasi */
+.nav-box a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+}
+
+/* Glow effect untuk semua teks */
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff; /* Warna putih */
+  text-shadow: 
+    0 0 5px #00f7ff,   /* Glow utama warna biru muda */
+    0 0 10px #00f7ff,
+    0 0 20px #00f7ff,
+    0 0 40px #00e0ff;
+  background-color: #0d0d0d; /* Background gelap biar glow makin kelihatan */
+}
+
+/* Glow lebih kuat untuk heading */
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  color: #ffffff;
+  text-shadow: 
+    0 0 5px #ff00ff,
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 30px #ff00ff,
+    0 0 40px #ff00ff;
+}
