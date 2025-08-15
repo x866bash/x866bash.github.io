@@ -100,9 +100,9 @@ updateClock();
 
 // TV Play Button
 const playlist = [
-    "https://www.youtube.com/embed/VIDEO_ID_1?autoplay=1",
-    "https://www.youtube.com/embed/VIDEO_ID_2?autoplay=1",
-    "https://www.youtube.com/embed/VIDEO_ID_3?autoplay=1"
+    "https://www.youtube.com/embed/5OQ4xivtF4w?autoplay=1",
+    "https://www.youtube.com/embed/594AS9v3cPk?autoplay=1",
+    "https://www.youtube.com/embed/MGgwX5ykKHY?autoplay=1"
 ];
 let currentVideo = 0;
 document.getElementById("playBtn").addEventListener("click", () => {
