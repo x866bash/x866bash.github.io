@@ -39,7 +39,7 @@
     .hero::before {
       content: "";
       position: absolute; inset: 0;
-      background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('./images/background.jpg');
+      background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('./images/home.jpg');
       background-size: cover;
       background-position: center;
       filter: saturate(1.05) contrast(1.05) brightness(.85);
@@ -48,7 +48,7 @@
     }
 
     .hero.light::before {
-      background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('./images/background.jpg');
+      background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('./images/home.jpg');
       filter: brightness(.9);
     }
 
@@ -100,14 +100,6 @@
     <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
     <div class="container">
       <div class="poem fade-up" id="puisi">
-Malam datang memeluk bumi,
-  membisikkan rahasia pada angin.
-Di antara bintang yang malu-malu,
-  aku titipkan rinduku padamu.
-      </div>
-    </div>
-    <div class="footer">© <span id="year"></span> Nama Brand Kamu</div>
-  </section>
 Kamu adalah 1 1 nya perempuan yang aku sayang, walaupun kita sudah tidak pacaran lagi,
 kamu lah 1 1 nya orang yang gak bakalan aku lupakan dan aku gk tega ngelakuin apa yang aku mau atau nyebarin aib kamu,
 mungkin aku sengaja kirim chat ke reza aku udah punya pacar 2 tahun padahal gk ada sama sekali,
@@ -118,6 +110,11 @@ apalagi aku sampai tahu jika ada yang buat kamu nangis,
 pasti akan aku buat dia gk ada di muka bumi ini.
 jadi, aku akan tinggal kan kamu selamanya.
 mudah mudahan di kemudian hari kamu bisa mengingatkan semua yang sudah kita lewati bersama.
+      </div>
+    </div>
+    <div class="footer">© <span id="year"></span> Nama Brand Kamu</div>
+  </section>
+
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     function toggleTheme() {
