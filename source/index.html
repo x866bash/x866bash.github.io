@@ -1,341 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>My Room</title>
-<style>
-/* === Reset & Body === */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: monospace;
-  background: black;
-  color: white;
-  overflow-x: hidden;
-}
-
-/* === Popup === */
-#popup {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.popup-content {
-  background: rgba(255,255,255,0.1);
-  border: 2px solid rgba(255,255,255,0.5);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(255,255,255,0.5);
-}
-
-.glass-button {
-  padding: 10px 20px;
-  border: 2px solid rgba(255,255,255,0.7);
-  border-radius: 8px;
-  background: transparent;
-  color: white;
-  cursor: pointer;
-  font-size: 1.2rem;
-  box-shadow: 0 0 10px rgba(0,255,255,0.7);
-}
-.glass-button:hover {
-  box-shadow: 0 0 20px rgba(0,255,255,1);
-}
-
-#loadingText { display: none; margin-top: 10px; }
-
-/* === Glass Break Canvas === */
-#glassCanvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 999;
-}
-
-/* === Background Awan & Petir === */
-#clouds {
-  position: fixed;
-  top:0; left:0;
-  width:200%;
-  height:100%;
-  background: url('https://i.ibb.co/zn0mjpw/clouds.png') repeat-x;
-  animation: moveClouds 60s linear infinite;
-  z-index: -2;
-}
-@keyframes moveClouds { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-#lightning {
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: white;
-  opacity: 0;
-  z-index: -1;
-}
-@keyframes flash {
-  0%, 100% { opacity: 0; }
-  5% { opacity: 1; }
-}
-
-/* === Terminal === */
-#terminal {
-  max-width: 800px;
-  margin: 100px auto 20px;
-  background: #111;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0,255,255,0.5);
-  overflow: hidden;
-}
-.light { background: #eee; color: black; }
-.dark { background: #111; color: white; }
-#terminalText { white-space: pre-line; }
-
-/* === List Struktur === */
-.folder { cursor: pointer; font-weight: bold; }
-.sub-list { display: none; margin-left: 20px; }
-
-/* === Jam === */
-#clock {
-  font-size: 2rem;
-  text-align: center;
-  margin-top: 20px;
-  text-shadow: 0 0 10px rgba(0,255,255,0.7);
-}
-
-/* === Marquee === */
-.marquee {
-  font-size: 1.2rem;
-  margin-top: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  display: block;
-  animation: marqueeAnim 20s linear infinite;
-  text-shadow: 0 0 10px orange, 0 0 20px red;
-}
-@keyframes marqueeAnim { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-
-/* === Play Button & TV === */
-#playBtn {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  color: white;
-  background: transparent;
-  border: 2px solid rgba(255,255,255,0.7);
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,255,255,0.7);
-  cursor: pointer;
-}
-#playBtn:hover { box-shadow: 0 0 20px rgba(0,255,255,1); }
-
-#tvContainer {
-  display: none;
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%; height: 60%;
-  background: black;
-  z-index: 2000;
-  overflow: hidden;
-  border: 4px solid rgba(0,255,255,0.7);
-  border-radius: 12px;
-  box-shadow: 0 0 40px rgba(0,255,255,0.7);
-}
-.tv-on {
-  position: absolute;
-  width: 100%; height: 100%;
-  background: black;
-  animation: tvOn 1.5s forwards;
-  z-index: 10;
-}
-@keyframes tvOn {
-  0% { background: black; }
-  30% { background: white; height: 5%; top: 47%; }
-  60% { background: white; height: 100%; top: 0; opacity: 1; }
-  100% { opacity: 0; }
-}
-#tvVideo { width: 100%; height: 100%; z-index: 5; }
-</style>
+    <meta charset="UTF-8">
+    <title>My Room</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Popup Selamat Datang -->
+    <div id="popup">
+        <div class="popup-content">
+            <h2>Selamat Datang</h2>
+            <button id="masukBtn" class="btn-shadow">Masuk</button>
+            <div id="loadingText">Memuat...</div>
+        </div>
+    </div>
 
-<div id="clouds"></div>
-<div id="lightning"></div>
+    <!-- Background Awan & Petir -->
+    <div id="background">
+        <div class="cloud"></div>
+        <div class="lightning"></div>
+    </div>
 
-<!-- Popup -->
-<div id="popup">
-  <div class="popup-content">
-    <h2>Selamat Datang</h2>
-    <button id="masukBtn" class="glass-button">Masuk</button>
-    <div id="loadingText">Memuat...</div>
-  </div>
-</div>
+    <!-- Terminal -->
+    <div id="terminal">
+        <pre id="terminalText"></pre>
+        <div id="fileTree">
+            <div class="folder">MY-ROOM/</div>
+            <div class="content">
+                ├── src/<br>
+                │   ├── app.py<br>
+                │   ├── db.py<br>
+            </div>
+        </div>
+    </div>
 
-<canvas id="glassCanvas"></canvas>
+    <!-- Jam -->
+    <div id="clock"></div>
 
-<!-- Terminal -->
-<div id="terminal" class="dark">
-  <div id="terminalText"></div>
-  <div class="folder">MY-ROOM/</div>
-  <div class="sub-list">
-    ├── src/<br>
-    │   ├── app.py<br>
-    │   ├── db.py<br>
-  </div>
-</div>
+    <!-- Marquee -->
+    <div class="marquee">
+        <span>Selamat menikmati makanan yang sudah di sediakan, semoga enak makanannya, dan enak, selamat makan yah...!!!</span>
+    </div>
 
-<div id="clock"></div>
+    <!-- Tombol Play -->
+    <button id="playBtn" class="btn-shadow">Play</button>
+    <div id="tvContainer">
+        <iframe id="youtubePlayer" allow="autoplay"></iframe>
+    </div>
 
-<marquee class="marquee">
-Selamat menikmati makanan yang sudah di sediakan, semoga enak makanannya, dan enak, selamat makan yah...!!!
-</marquee>
+    <!-- Credit -->
+    <div class="credit">Credit by : Dani</div>
 
-<button id="playBtn" class="glass-button">PLAY</button>
-
-<div class="credit" style="text-align:center;margin-top:10px;">Credit by : Dani</div>
-
-<div id="tvContainer">
-  <div class="tv-on"></div>
-  <iframe id="tvVideo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-</div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-// Lightning loop
-setInterval(() => {
-  const lightning = document.getElementById("lightning");
-  lightning.style.animation = "flash 0.5s";
-  setTimeout(() => lightning.style.animation = "", 500);
-}, 5000 + Math.random()*5000);
-
-// Typing text
-const terminalLines = [
- "WELCOME TO MY ROOM",
- "selamat datang di ruangan saya",
- "ini adalah ruangan yang gk ada apa apa nya di banding kalian yang banyak kreasi,",
- "saya cuma pelajar yang baru buat scrip simple dengan bantuan ChatGPT,",
- "jika suka dengan ruangan saya bisa yaudah haveFUN ye nO coMMEnt ye."
-];
-let lineIndex = 0;
-function typeLine() {
-  if (lineIndex < terminalLines.length) {
-    const textElem = document.getElementById("terminalText");
-    let charIndex = 0;
-    const line = terminalLines[lineIndex] + "\n";
-    const typer = setInterval(() => {
-      textElem.textContent += line[charIndex];
-      charIndex++;
-      if (charIndex >= line.length) {
-        clearInterval(typer);
-        lineIndex++;
-        setTimeout(typeLine, 500);
-      }
-    }, 50);
-  }
-}
-typeLine();
-
-// Folder click
-document.querySelector(".folder").addEventListener("click", () => {
-  const subList = document.querySelector(".sub-list");
-  subList.style.display = subList.style.display === "block" ? "none" : "block";
-});
-
-// Clock
-function updateClock() {
-  document.getElementById("clock").textContent = new Date().toLocaleTimeString();
-}
-setInterval(updateClock, 1000); updateClock();
-
-// Popup masuk
-document.getElementById("masukBtn").addEventListener("click", () => {
-  document.getElementById("loadingText").style.display = "block";
-  setTimeout(() => {
-    triggerGlassBreak();
-    document.getElementById("popup").style.display = "none";
-  }, 10000);
-});
-
-// Glass break effect
-function triggerGlassBreak() {
-  const canvas = document.getElementById("glassCanvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const shards = [];
-  for (let i=0; i<50; i++) {
-    shards.push({
-      x: window.innerWidth/2,
-      y: window.innerHeight/2,
-      dx: (Math.random()-0.5)*10,
-      dy: (Math.random()-0.5)*10,
-      size: Math.random()*20+5,
-      color: `rgba(${200+Math.random()*55},${200+Math.random()*55},${200+Math.random()*55},0.7)`
-    });
-  }
-  const audio = new Audio("https://www.soundjay.com/mechanical/sounds/glass-break-1.mp3");
-  audio.play();
-
-  function animate() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    shards.forEach(s => {
-      s.x += s.dx;
-      s.y += s.dy;
-      s.dy += 0.3;
-      ctx.fillStyle = s.color;
-      ctx.beginPath();
-      ctx.moveTo(s.x, s.y);
-      ctx.lineTo(s.x + s.size, s.y + s.size/2);
-      ctx.lineTo(s.x + s.size/2, s.y + s.size);
-      ctx.closePath();
-      ctx.fill();
-    });
-    if (shards.some(s => s.y < canvas.height)) requestAnimationFrame(animate);
-  }
-  animate();
-}
-
-// TV Play
-const playlist = [
- "https://www.youtube.com/embed/VIDEO_ID1?autoplay=1",
- "https://www.youtube.com/embed/VIDEO_ID2?autoplay=1",
- "https://www.youtube.com/embed/VIDEO_ID3?autoplay=1"
-];
-let currentVideo = 0;
-document.getElementById("playBtn").addEventListener("click", () => {
-  const tv = document.getElementById("tvContainer");
-  const tvOn = document.querySelector(".tv-on");
-  const video = document.getElementById("tvVideo");
-  tv.style.display = "block";
-  tvOn.style.animation = "tvOn 1.5s forwards";
-  setTimeout(() => {
-    video.src = playlist[currentVideo] + "&enablejsapi=1";
-  }, 1500);
-});
-function onYouTubeIframeAPIReady() {
-  window.player = new YT.Player('tvVideo', {
-    events: {
-      'onStateChange': (event) => {
-        if (event.data === YT.PlayerState.ENDED) {
-          currentVideo = (currentVideo + 1) % playlist.length;
-          player.loadVideoByUrl(playlist[currentVideo]);
-        }
-      }
-    }
-  });
-}
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
+
