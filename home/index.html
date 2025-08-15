@@ -36,17 +36,17 @@
     .hero::before {
       content: "";
       position: absolute; inset: 0;
-      background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('./images/home.jpg');
+      background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('images/background.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      filter: brightness(0.7) saturate(1.05) contrast(1.05);
+      filter: brightness(0.6) saturate(1.05) contrast(1.05);
       z-index: -2;
       transition: filter 0.4s, background-image 0.4s;
     }
     .hero.light::before {
-      background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('./images/home.jpg');
-      filter: brightness(0.85);
+      background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('images/background-light.jpg');
+      filter: brightness(0.8);
     }
     .hero::after {
       content: "";
@@ -72,8 +72,8 @@
     }
     .top-buttons {
       position: absolute;
-      top: 1rem; left: 1rem;
-      display: flex; gap: .5rem;
+      top: 1rem; left: 1rem; right: 1rem;
+      display: flex; justify-content: space-between; gap: .5rem;
     }
     .theme-toggle, .menu-toggle {
       background: rgba(0,0,0,0.5);
@@ -109,9 +109,9 @@
 <body>
   <section class="hero" id="hero">
     <div class="top-buttons">
-      <button class="menu-toggle" onclick="toggleMenu()">🏠</button>
+      <button class="menu-toggle" id="menuBtn" onclick="toggleMenu()">🏠 Home</button>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
     </div>
-    <button class="theme-toggle" style="position:absolute;top:1rem;right:1rem;" onclick="toggleTheme()">🌙 / ☀️</button>
     <div class="menu-panel" id="menuPanel">
       <a href="#" onclick="closeMenu()">🔙 Back</a>
       <a href="#">ℹ️ Info</a>
@@ -149,10 +149,20 @@ mudah mudahan di kemudian hari kamu bisa mengingatkan semua yang sudah kita lewa
       }
     }
     function toggleMenu() {
-      document.getElementById('menuPanel').classList.toggle('show');
+      const menuPanel = document.getElementById('menuPanel');
+      const menuBtn = document.getElementById('menuBtn');
+      menuPanel.classList.toggle('show');
+      if (menuPanel.classList.contains('show')) {
+        menuBtn.textContent = '🔙 Back';
+      } else {
+        menuBtn.textContent = '🏠 Home';
+      }
     }
     function closeMenu() {
-      document.getElementById('menuPanel').classList.remove('show');
+      const menuPanel = document.getElementById('menuPanel');
+      const menuBtn = document.getElementById('menuBtn');
+      menuPanel.classList.remove('show');
+      menuBtn.textContent = '🏠 Home';
     }
   </script>
 </body>
