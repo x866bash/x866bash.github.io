@@ -36,7 +36,11 @@
     .hero::before {
       content: "";
       position: absolute; inset: 0;
+<<<<<<< HEAD
       background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('images/home.jpg');
+=======
+      background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('images/home1.jpg');
+>>>>>>> fc0687c (FINAL LAST)
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -45,7 +49,11 @@
       transition: filter 0.4s, background-image 0.4s;
     }
     .hero.light::before {
+<<<<<<< HEAD
       background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('images/home.jpg');
+=======
+      background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('images/home2');
+>>>>>>> fc0687c (FINAL LAST)
       filter: brightness(0.8);
     }
     .hero::after {
@@ -113,9 +121,9 @@
       <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
     </div>
     <div class="menu-panel" id="menuPanel">
-      <a href="#" onclick="closeMenu()">🔙 Back</a>
-      <a href="#">ℹ️ Info</a>
-      <a href="#">💻 Source</a>
+      <a href="/" onclick="closeMenu()">🔙 Back</a>
+      <a href="/info">ℹ️ Info</a>
+      <a href="/source">💻 Source</a>
     </div>
     <div class="container">
       <div class="poem" id="puisi">
