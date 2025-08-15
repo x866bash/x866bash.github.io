@@ -25,7 +25,7 @@
         box-shadow: 0 0 15px rgba(255,255,255,0.5);
         z-index: 9999;
     }
-    #masukBtn {
+    #masukBtn, #playBtn {
         padding: 10px 20px;
         border: 2px solid white;
         background: transparent;
@@ -40,16 +40,72 @@
         font-style: italic;
     }
     /* Canvas kaca pecah */
-    #glassCanvas {
+    #glassCanvas, #bgCanvas {
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 9998;
-        pointer-events: none;
+        z-index: 1;
+    }
+    /* Terminal */
+    #terminal {
+        position: relative;
+        background: rgba(0,0,0,0.8);
+        margin: 50px auto 0;
+        padding: 10px;
+        width: 80%;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #0f0;
+        display: none;
+        z-index: 2;
+    }
+    .tree {
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    .tree .nested {
+        display: none;
+        margin-left: 20px;
+    }
+    .tree .active {
+        display: block;
+    }
+    /* Jam */
+    #clock {
+        margin-top: 20px;
+        font-size: 24px;
+        text-shadow: 0 0 10px white;
+    }
+    /* Marquee */
+    .marquee {
+        white-space: nowrap;
+        overflow: hidden;
+        box-sizing: border-box;
+        animation: marquee 20s linear infinite;
+        margin-top: 20px;
+        font-size: 18px;
+        text-shadow: 0 0 5px red, 0 0 10px orange, 0 0 20px yellow;
+    }
+    @keyframes marquee {
+        0% { transform: translate(100%, 0); }
+        100% { transform: translate(-100%, 0); }
+    }
+    /* TV */
+    #tvContainer {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+    }
+    iframe {
+        width: 560px;
+        height: 315px;
+        border: none;
     }
 </style>
 </head>
 <body>
+
+<canvas id="bgCanvas"></canvas>
+<canvas id="glassCanvas"></canvas>
 
 <!-- Popup -->
 <div id="popup">
@@ -58,73 +114,164 @@
     <div id="loadingText">Memuat...</div>
 </div>
 
-<!-- Canvas kaca pecah -->
-<canvas id="glassCanvas"></canvas>
+<!-- Terminal -->
+<div id="terminal">
+    <div id="terminalText"></div>
+    <div class="tree" id="myRoom">MY-ROOM/</div>
+    <div class="nested">
+        ├── src/<br>
+        │ ├── app.py<br>
+        │ ├── db.py
+    </div>
+    <div id="clock"></div>
+    <div class="marquee">Selamat menikmati makanan yang sudah di sediakan, semoga enak makanannya, dan enak, selamat makan yah...!!!</div>
+    <button id="playBtn">Play</button>
+    <div id="tvContainer">
+        <iframe id="ytplayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div>Credit by : Dani</div>
+</div>
 
 <script>
-    const masukBtn = document.getElementById("masukBtn");
-    const popup = document.getElementById("popup");
-    const loadingText = document.getElementById("loadingText");
-    const glassCanvas = document.getElementById("glassCanvas");
-    const ctx = glassCanvas.getContext("2d");
+/* ====== Popup & Glass Effect ====== */
+const masukBtn = document.getElementById("masukBtn");
+const popup = document.getElementById("popup");
+const loadingText = document.getElementById("loadingText");
+const glassCanvas = document.getElementById("glassCanvas");
+const ctx = glassCanvas.getContext("2d");
+glassCanvas.width = window.innerWidth;
+glassCanvas.height = window.innerHeight;
+let shards = [];
 
-    glassCanvas.width = window.innerWidth;
-    glassCanvas.height = window.innerHeight;
+masukBtn.addEventListener("click", () => {
+    loadingText.style.display = "block";
+    setTimeout(() => {
+        loadingText.style.display = "none";
+        triggerGlassBreak();
+        popup.style.display = "none";
+        showTerminal();
+    }, 10000);
+});
 
-    let shards = [];
-
-    masukBtn.addEventListener("click", () => {
-        loadingText.style.display = "block"; // tampilkan memuat...
-        setTimeout(() => {
-            loadingText.style.display = "none"; // sembunyikan memuat
-            triggerGlassBreak(); // efek kaca pecah
-            popup.style.display = "none"; // hilangkan popup
-        }, 10000);
-    });
-
-    function triggerGlassBreak() {
-        playGlassSound();
-        shards = [];
-        const shardCount = 50;
-        for (let i = 0; i < shardCount; i++) {
-            shards.push({
-                x: window.innerWidth / 2,
-                y: window.innerHeight / 2,
-                size: Math.random() * 20 + 5,
-                speedX: (Math.random() - 0.5) * 8,
-                speedY: (Math.random() - 0.5) * 8,
-                color: `rgba(200, 255, 255, ${Math.random() * 0.5 + 0.5})`
-            });
-        }
-        animateShards();
-    }
-
-    function animateShards() {
-        ctx.clearRect(0, 0, glassCanvas.width, glassCanvas.height);
-        shards.forEach(s => {
-            ctx.beginPath();
-            ctx.fillStyle = s.color;
-            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-            ctx.fill();
-            s.x += s.speedX;
-            s.y += s.speedY;
-            s.speedY += 0.2; // gravitasi
+function triggerGlassBreak() {
+    playGlassSound();
+    shards = [];
+    for (let i = 0; i < 50; i++) {
+        shards.push({
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            size: Math.random() * 20 + 5,
+            speedX: (Math.random() - 0.5) * 8,
+            speedY: (Math.random() - 0.5) * 8,
+            color: `rgba(${200+Math.random()*55},${200+Math.random()*55},255,${Math.random()*0.5+0.5})`
         });
-        if (shards.some(s => s.y < window.innerHeight)) {
-            requestAnimationFrame(animateShards);
+    }
+    animateShards();
+}
+
+function animateShards() {
+    ctx.clearRect(0, 0, glassCanvas.width, glassCanvas.height);
+    shards.forEach(s => {
+        ctx.beginPath();
+        ctx.fillStyle = s.color;
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+        s.x += s.speedX;
+        s.y += s.speedY;
+        s.speedY += 0.2;
+    });
+    if (shards.some(s => s.y < window.innerHeight)) requestAnimationFrame(animateShards);
+}
+
+function playGlassSound() {
+    const audio = new Audio("https://www.myinstants.com/media/sounds/glass-breaking.mp3");
+    audio.play();
+}
+
+/* ====== Background Awan + Petir ====== */
+const bgCanvas = document.getElementById("bgCanvas");
+const bgCtx = bgCanvas.getContext("2d");
+bgCanvas.width = window.innerWidth;
+bgCanvas.height = window.innerHeight;
+let clouds = [];
+for (let i = 0; i < 5; i++) {
+    clouds.push({x: Math.random()*bgCanvas.width, y: Math.random()*200, speed: 0.3+Math.random()*0.5});
+}
+function drawBackground() {
+    bgCtx.fillStyle = "black";
+    bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
+    bgCtx.fillStyle = "gray";
+    clouds.forEach(c => {
+        bgCtx.beginPath();
+        bgCtx.arc(c.x, c.y, 50, 0, Math.PI*2);
+        bgCtx.fill();
+        c.x += c.speed;
+        if (c.x > bgCanvas.width+50) c.x = -50;
+    });
+    if (Math.random()<0.005) {
+        bgCtx.fillStyle = "rgba(255,255,255,0.8)";
+        bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
+    }
+    requestAnimationFrame(drawBackground);
+}
+drawBackground();
+
+/* ====== Terminal & Typing Effect ====== */
+const terminal = document.getElementById("terminal");
+const terminalText = document.getElementById("terminalText");
+function showTerminal() {
+    terminal.style.display = "block";
+    const messages = [
+        "WELCOME TO MY ROOM",
+        "selamat datang di ruangan saya",
+        "ini adalah ruangan yang gk ada apa apa nya di banding kalian yang banyak kreasi,",
+        "saya cuma pelajar yang baru buat scrip simple dengan bantuan ChatGPT,",
+        "jika suka dengan ruangan saya bisa yaudah haveFUN ye nO coMMEnt ye."
+    ];
+    let index = 0;
+    function typeLine() {
+        if (index < messages.length) {
+            let line = messages[index];
+            let charIndex = 0;
+            let interval = setInterval(() => {
+                if (charIndex < line.length) {
+                    terminalText.innerHTML += line[charIndex++];
+                } else {
+                    terminalText.innerHTML += "<br>";
+                    clearInterval(interval);
+                    index++;
+                    setTimeout(typeLine, 500);
+                }
+            }, 50);
         }
     }
+    typeLine();
+}
 
-    function playGlassSound() {
-        const audio = new Audio("https://www.myinstants.com/media/sounds/glass-breaking.mp3");
-        audio.play();
-    }
+/* ====== Tree Expand ====== */
+document.getElementById("myRoom").addEventListener("click", function(){
+    this.nextElementSibling.classList.toggle("active");
+});
 
-    window.addEventListener("resize", () => {
-        glassCanvas.width = window.innerWidth;
-        glassCanvas.height = window.innerHeight;
-    });
+/* ====== Clock ====== */
+function updateClock() {
+    document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+}
+setInterval(updateClock, 1000);
+
+/* ====== TV Play Button ====== */
+const playBtn = document.getElementById("playBtn");
+const tvContainer = document.getElementById("tvContainer");
+const ytplayer = document.getElementById("ytplayer");
+const playlist = [
+    "https://www.youtube.com/embed/VIDEO_ID1?autoplay=1",
+    "https://www.youtube.com/embed/VIDEO_ID2?autoplay=1"
+];
+let currentVideo = 0;
+playBtn.addEventListener("click", () => {
+    tvContainer.style.display = "block";
+    ytplayer.src = playlist[currentVideo];
+});
 </script>
-
 </body>
 </html>
