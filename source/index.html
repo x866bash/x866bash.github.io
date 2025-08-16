@@ -379,8 +379,9 @@ enterBtn.addEventListener('click', async ()=>{
 
     // lalu tampilkan terminal setelah delay kecil untuk transisi yang smooth
     setTimeout(() => {
+      console.log('About to show terminal...');
       showTerminal();
-    }, 200);
+    }, 500); // Increased delay untuk memastikan shatter selesai
     
   }, 3000); // PERBAIKAN 3: Konsisten 3 detik loading
 });
@@ -392,6 +393,11 @@ const terminal = document.getElementById('terminal');
 const termBody = document.getElementById('termBody');
 const themeToggle = document.getElementById('themeToggle');
 
+// Debug: Check if elements exist
+console.log('Terminal element:', terminal);
+console.log('Terminal body element:', termBody);
+console.log('Theme toggle element:', themeToggle);
+
 const lines = [
   "WELCOME TO MY ROOM",
   "selamat datang di ruangan saya",
@@ -401,24 +407,44 @@ const lines = [
 ];
 
 function showTerminal(){
-  terminal.classList.add('show');
-  typewriter(lines, 46);
+  // Pastikan terminal ada dan ditampilkan
+  if(terminal) {
+    terminal.style.display = 'block';
+    terminal.classList.add('show');
+    console.log('Terminal displayed');
+    
+    // Mulai typewriter setelah terminal muncul
+    setTimeout(() => {
+      typewriter(lines, 46);
+    }, 100);
+  } else {
+    console.error('Terminal element not found');
+  }
 }
 
 function typewriter(arr, speed=50){
+  if(!termBody) {
+    console.error('Terminal body element not found');
+    return;
+  }
+  
   termBody.innerHTML = "";
   let li=0, ci=0;
   termBody.classList.add('caret');
+  
+  console.log('Starting typewriter with lines:', arr);
+  
   (function tick(){
     if(li>=arr.length){ 
       termBody.classList.remove('caret'); 
+      console.log('Typewriter finished');
       return; 
     }
     if(ci < arr[li].length){
       termBody.textContent += arr[li][ci++];
       setTimeout(tick, speed);
     }else{
-      termBody.textContent += "\n";
+      termBody.innerHTML += "<br>"; // Gunakan <br> untuk line break yang lebih konsisten
       li++; ci=0;
       setTimeout(tick, 360);
     }
