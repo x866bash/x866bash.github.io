@@ -345,9 +345,9 @@ function animateShatter(){
 }
 
 enterBtn.addEventListener('click', async ()=>{
-  // Tampilkan loading dulu 10 detik
+  // Tampilkan loading dulu 5 detik
   popup.style.display='none';
-  loading.style.display='none';
+  loading.style.display='flex';
 
   // siapkan suara
   const glassSfx = document.getElementById('glassSfx');
@@ -370,7 +370,7 @@ enterBtn.addEventListener('click', async ()=>{
 
     // lalu tampilkan terminal
     showTerminal();
-  }, 10000); // 10 detik
+  }, 5000); // 5 detik
 });
 
 /* =========================
