@@ -362,7 +362,7 @@
    UTIL
 ========================= */
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-const pad2 =n => String(n)padStart(2, '0');
+const duaDigit = angka => String(angka).padStart(2, '0');
 
 /* =========================
    BACKGROUND: awan + petir
@@ -729,47 +729,39 @@ playYouTubeBtn.addEventListener('click', ()=>{
 /* =========================
    Digital Clock
 ========================= */
-// Elemen target dari HTML Anda
-    const $time = document.getElementById('digitalTime');
-    const $date = document.getElementById('digitalDate');
-    const $day  = document.getElementById('digitalDay');
+const elemenWaktu   = document.getElementById('teksWaktu');
+    const elemenTanggal = document.getElementById('teksTanggal');
+    const elemenHari    = document.getElementById('teksHari');
 
-    // Formatter lokal Indonesia
-    const fmtDate = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    const fmtDay  = new Intl.DateTimeFormat('id-ID', { weekday: 'long' });
+    // Format Bahasa Indonesia
+    const formatTanggal = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    const formatHari    = new Intl.DateTimeFormat('id-ID', { weekday: 'long' });
 
-    function render(now) {
-      const h = now.getHours();
-      const m = now.getMinutes();
-      const s = now.getSeconds();
+    function tampilkanWaktu(sekarang) {
+      const jam   = sekarang.getHours();
+      const menit = sekarang.getMinutes();
+      const detik = sekarang.getSeconds();
 
-      // Jam 24 jam: HH:MM:SS
-      $time.textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
-
-      // Tanggal (contoh: 1 Januari 2024)
-      $date.textContent = fmtDate.format(now);
-
-      // Hari (contoh: Senin)
-      $day.textContent = fmtDay.format(now);
+      elemenWaktu.textContent   = `${duaDigit(jam)}:${duaDigit(menit)}:${duaDigit(detik)}`;
+      elemenTanggal.textContent = formatTanggal.format(sekarang);
+      elemenHari.textContent    = formatHari.format(sekarang);
     }
 
-    function tick() {
-      const now = new Date();
-      render(now);
-      // Sinkron ke detik berikutnya untuk akurasi (menghindari drift setInterval)
-      const ms = now.getMilliseconds();
-      setTimeout(tick, 1000 - ms);
+    function jalankanJam() {
+      const sekarang = new Date();
+      tampilkanWaktu(sekarang);
+      const ms = sekarang.getMilliseconds();
+      setTimeout(jalankanJam, 1000 - ms);
     }
 
-    // Mulai
-    render(new Date());
-    tick();
+    // Mulai pertama kali
+    tampilkanWaktu(new Date());
+    jalankanJam();
 
-    // Opsional: update saat tab kembali fokus (agar tidak tertinggal)
+    // Pastikan update saat tab kembali aktif
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) render(new Date());
+      if (!document.hidden) tampilkanWaktu(new Date());
     });
-
 /* =========================
    SAFETY
 ========================= */
