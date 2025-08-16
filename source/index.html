@@ -365,12 +365,13 @@ enterBtn.addEventListener('click', async ()=>{
       try{ await glassSfx.play(); }catch(_e){}
     }
 
-    loading.style.display='none';
-
-    // lalu tampilkan terminal
-    showTerminal();
-  }, 5000); // 5 detik
+    	setTimeout(() => {
+        loadingText.style.display = "none"; // sembunyikan memuat...
+        triggerGlassBreak(); // jalankan efek kaca pecah
+        document.getElementById("welcomePoup").style.display = "none"; // tutup popup
+    }, 5000); // tunggu 5 detik
 });
+
 
 /* =========================
    TERMINAL (slide + typewriter + theme)
