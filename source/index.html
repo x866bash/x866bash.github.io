@@ -95,6 +95,73 @@
   }
   @keyframes marq{from{transform:translateX(0)} to{transform:translateX(-100%)}}
 
+  /* ===== YouTube Button & Video ===== */
+  #videoWrap{width:min(560px, 90vw); margin:20px auto; text-align:center;}
+  .youtube-btn{
+    background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+    border: 2px solid #333;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 
+      0 4px 8px rgba(0,0,0,0.3),
+      0 2px 4px rgba(0,0,0,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+    text-shadow: 0 0 4px #ff0000;
+  }
+  .youtube-btn:hover{
+    background: linear-gradient(145deg, #2a2a2a, #1d1d1d);
+    box-shadow: 
+      0 6px 12px rgba(255,0,0,0.3),
+      0 4px 8px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.15);
+    text-shadow: 0 0 6px #ff0000, 0 0 12px #ff3333;
+  }
+  .youtube-btn:active{
+    transform: translateY(1px);
+    box-shadow: 
+      0 2px 4px rgba(255,0,0,0.4),
+      0 1px 2px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  
+  .video-container{
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-top: 16px;
+    opacity: 0;
+    transform: scaleY(0.1) scaleX(0.8);
+    transform-origin: center;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 0 0 rgba(255,0,0,0);
+  }
+  
+  .video-container.show{
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+    box-shadow: 
+      0 0 20px rgba(255,0,0,0.6),
+      0 0 40px rgba(255,0,0,0.4),
+      0 8px 32px rgba(0,0,0,0.3);
+  }
+  
+  .video-container iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 12px;
+  }
+
   /* ===== Credit ===== */
   .credit{text-align:center; opacity:.7; margin-bottom:28px}
 
@@ -153,6 +220,25 @@
 
 <!-- Clock -->
 <div id="clockWrap"><canvas id="clockCanvas" width="500" height="500"></canvas></div>
+
+<!-- YouTube Video -->
+<div id="videoWrap">
+  <h3 style="color:#00ff88; margin-bottom:12px; font-size:18px; letter-spacing:0.5px;">🎵 Background Music 🎵</h3>
+  
+  <button id="playYouTubeBtn" class="youtube-btn">▶️ Play YouTube</button>
+  
+  <div id="videoContainer" class="video-container">
+    <iframe 
+      id="youtubeIframe"
+      src=""
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      allowfullscreen
+      title="Background Music">
+    </iframe>
+  </div>
+  
+  <p style="color:#cfe; font-size:12px; opacity:0.8; margin-top:8px;">Nikmati musik sambil menjelajahi ruangan</p>
+</div>
 
 <!-- Marquee -->
 <div class="marquee">
@@ -506,6 +592,29 @@ function drawClock(){
 }
 setInterval(drawClock, 1000); 
 drawClock();
+
+/* =========================
+   SAFETY
+========================= */
+/* =========================
+   YOUTUBE BUTTON FUNCTIONALITY
+========================= */
+const playYouTubeBtn = document.getElementById('playYouTubeBtn');
+const videoContainer = document.getElementById('videoContainer');
+const youtubeIframe = document.getElementById('youtubeIframe');
+
+playYouTubeBtn.addEventListener('click', ()=>{
+  // Hide button
+  playYouTubeBtn.style.display = 'none';
+  
+  // Set iframe source with autoplay
+  youtubeIframe.src = 'https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=0&loop=1&playlist=jfKfPfyJRdk&controls=1&modestbranding=1&rel=0';
+  
+  // Show video with TV turn-on effect
+  setTimeout(() => {
+    videoContainer.classList.add('show');
+  }, 100);
+});
 
 /* =========================
    SAFETY
