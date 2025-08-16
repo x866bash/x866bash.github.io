@@ -16,7 +16,7 @@
   /* ===== Glass Shatter Canvas ===== */
   #glassCanvas{position:fixed; inset:0; z-index:1000; pointer-events:none; display:none}
 
-  /* ===== Popup Welcome (kaca transparan “cermin”) ===== */
+  /* ===== Popup Welcome (kaca transparan "cermin") ===== */
   #welcomePopup{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.4); z-index:999}
   .glass-card{
     position:relative; padding:28px 36px; border-radius:14px;
@@ -26,7 +26,7 @@
     overflow:hidden; text-align:center; min-width:280px;
   }
 
-  /* efek pantulan “cermin” */
+  /* efek pantulan "cermin" */
   .glass-card::before{
     content:""; position:absolute; inset:-40% -10% auto -10%; height:160%;
     background:linear-gradient(60deg, rgba(255,255,255,.35) 0%, rgba(255,255,255,.06) 35%, rgba(255,255,255,0) 60%);
@@ -48,14 +48,21 @@
   .loading-text{font-size:18px; opacity:.9; letter-spacing:.3px}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* ===== Terminal ===== */
+  /* ===== Terminal - PERBAIKAN CSS ===== */
   #terminal{
     width:min(900px, 86vw); margin:90px auto 16px; border-radius:14px; overflow:hidden;
     background:#0d0f0f; color:#00ff88; box-shadow: 0 0 28px rgba(0,255,136,.25), 0 6px 40px rgba(0,0,0,.5);
-    transform: translateY(-20px); opacity:0; transition: transform .6s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
-    display:none;
+    transform: translateY(-20px); opacity:0; 
+    /* HAPUS display:none dan ganti dengan visibility untuk transisi yang lebih baik */
+    visibility: hidden;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1), opacity .6s ease, visibility 0s linear .6s;
   }
-  #terminal.show{display:block; transform:translateY(0); opacity:1}
+  #terminal.show{
+    transform:translateY(0); 
+    opacity:1; 
+    visibility: visible;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
+  }
   .term-bar{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:#151819; border-bottom:1px solid rgba(255,255,255,.06)}
   .term-title{opacity:.8; font-size:12px; letter-spacing:.3px}
   .term-body{padding:14px 14px 18px; min-height:160px; white-space:pre-wrap}
@@ -353,13 +360,13 @@ enterBtn.addEventListener('click', async ()=>{
   const glassSfx = document.getElementById('glassSfx');
 
   setTimeout(async ()=>{
-    // PERBAIKAN 1: Sembunyikan loading screen
+    // Sembunyikan loading screen
     loading.style.display='none';
     
     // ambil rect popup (posisi kaca) - gunakan glassCard yang sudah tersembunyi
     const r = glassCard.getBoundingClientRect();
     
-    // PERBAIKAN 2: Tampilkan canvas shatter sebelum animasi
+    // Tampilkan canvas shatter sebelum animasi
     shCanvas.style.display='block';
     createShardsFromRect(r);
 
@@ -377,35 +384,13 @@ enterBtn.addEventListener('click', async ()=>{
     // jalankan animasi shatter
     animateShatter();
 
-    // lalu tampilkan terminal setelah delay yang lebih panjang
+    // Tampilkan terminal setelah delay
     setTimeout(() => {
-      console.log('About to show terminal...');
-      // Coba beberapa cara untuk memastikan terminal muncul
-      const terminalEl = document.getElementById('terminal');
-      const termBodyEl = document.getElementById('termBody');
-      
-      console.log('Terminal found:', terminalEl);
-      console.log('TermBody found:', termBodyEl);
-      
-      if(terminalEl && termBodyEl) {
-        // Paksa tampilkan terminal dengan berbagai cara
-        terminalEl.style.display = 'block';
-        terminalEl.style.visibility = 'visible';
-        terminalEl.style.opacity = '1';
-        terminalEl.classList.add('show');
-        
-        console.log('Terminal should be visible now');
-        
-        // Mulai typewriter langsung
-        setTimeout(() => {
-          typewriter(lines, 46);
-        }, 200);
-      } else {
-        console.error('Terminal elements not found after timeout');
-      }
-    }, 1500); // Delay lebih panjang untuk memastikan DOM siap
+      console.log('Showing terminal...');
+      showTerminal();
+    }, 800); // Delay yang tepat untuk transisi
     
-  }, 3000); // PERBAIKAN 3: Konsisten 3 detik loading
+  }, 3000); // 3 detik loading
 });
 
 /* =========================
@@ -414,11 +399,6 @@ enterBtn.addEventListener('click', async ()=>{
 const terminal = document.getElementById('terminal');
 const termBody = document.getElementById('termBody');
 const themeToggle = document.getElementById('themeToggle');
-
-// Debug: Check if elements exist
-console.log('Terminal element:', terminal);
-console.log('Terminal body element:', termBody);
-console.log('Theme toggle element:', themeToggle);
 
 const lines = [
   "WELCOME TO MY ROOM",
@@ -429,18 +409,17 @@ const lines = [
 ];
 
 function showTerminal(){
-  // Pastikan terminal ada dan ditampilkan
-  if(terminal) {
-    terminal.style.display = 'block';
+  console.log('Terminal function called');
+  if(terminal && termBody) {
     terminal.classList.add('show');
-    console.log('Terminal displayed');
+    console.log('Terminal class "show" added');
     
-    // Mulai typewriter setelah terminal muncul
+    // Mulai typewriter setelah delay kecil
     setTimeout(() => {
       typewriter(lines, 46);
-    }, 100);
+    }, 300);
   } else {
-    console.error('Terminal element not found');
+    console.error('Terminal elements not found');
   }
 }
 
@@ -450,11 +429,10 @@ function typewriter(arr, speed=50){
     return;
   }
   
+  console.log('Typewriter started');
   termBody.innerHTML = "";
   let li=0, ci=0;
   termBody.classList.add('caret');
-  
-  console.log('Starting typewriter with lines:', arr);
   
   (function tick(){
     if(li>=arr.length){ 
@@ -466,7 +444,7 @@ function typewriter(arr, speed=50){
       termBody.textContent += arr[li][ci++];
       setTimeout(tick, speed);
     }else{
-      termBody.innerHTML += "<br>"; // Gunakan <br> untuk line break yang lebih konsisten
+      termBody.innerHTML += "<br>";
       li++; ci=0;
       setTimeout(tick, 360);
     }
@@ -581,8 +559,5 @@ addEventListener('load', ()=>{
   }
 });
 </script>
-</body>
-</html>
-
 </body>
 </html>
