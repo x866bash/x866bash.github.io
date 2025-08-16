@@ -161,7 +161,7 @@
 
 <!-- Audio (lokal + fallback URL, boleh diganti) -->
 <audio id="glassSfx" preload="auto">
-  <source src="glass-break.mp3" type="audio/mpeg">
+  <source src="/musik/glass-breaking-94894.mp3" type="audio/mpeg">
   <!-- fallback (ganti ke url favoritmu jika perlu) -->
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_21d8e34aa5.mp3" type="audio/mpeg">
 </audio>
@@ -377,11 +377,33 @@ enterBtn.addEventListener('click', async ()=>{
     // jalankan animasi shatter
     animateShatter();
 
-    // lalu tampilkan terminal setelah delay kecil untuk transisi yang smooth
+    // lalu tampilkan terminal setelah delay yang lebih panjang
     setTimeout(() => {
       console.log('About to show terminal...');
-      showTerminal();
-    }, 500); // Increased delay untuk memastikan shatter selesai
+      // Coba beberapa cara untuk memastikan terminal muncul
+      const terminalEl = document.getElementById('terminal');
+      const termBodyEl = document.getElementById('termBody');
+      
+      console.log('Terminal found:', terminalEl);
+      console.log('TermBody found:', termBodyEl);
+      
+      if(terminalEl && termBodyEl) {
+        // Paksa tampilkan terminal dengan berbagai cara
+        terminalEl.style.display = 'block';
+        terminalEl.style.visibility = 'visible';
+        terminalEl.style.opacity = '1';
+        terminalEl.classList.add('show');
+        
+        console.log('Terminal should be visible now');
+        
+        // Mulai typewriter langsung
+        setTimeout(() => {
+          typewriter(lines, 46);
+        }, 200);
+      } else {
+        console.error('Terminal elements not found after timeout');
+      }
+    }, 1500); // Delay lebih panjang untuk memastikan DOM siap
     
   }, 3000); // PERBAIKAN 3: Konsisten 3 detik loading
 });
