@@ -151,6 +151,13 @@
       0 0 40px rgba(255,0,0,0.4),
       0 8px 32px rgba(0,0,0,0.3);
   }
+
+  .video-container.minimized{
+    padding-bottom: 0;
+    height: 60px;
+    transform: scaleY(1) scaleX(1);
+    box-shadow: 0 0 10px rgba(255,0,0,0.4);
+  }
   
   .video-container iframe{
     position: absolute;
@@ -160,6 +167,71 @@
     height: 100%;
     border: 0;
     border-radius: 12px;
+  }
+
+  .video-controls{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    display: none;
+  }
+
+  .video-container.show .video-controls{
+    display: block;
+  }
+
+  .minimize-btn{
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #ff0000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    text-shadow: 0 0 4px #ff0000;
+    transition: all 0.2s ease;
+  }
+
+  .minimize-btn:hover{
+    background: rgba(255,0,0,0.2);
+    box-shadow: 0 0 8px rgba(255,0,0,0.5);
+  }
+
+  /* ===== Digital Clock ===== */
+  #digitalClock{
+    width: min(400px, 90vw);
+    margin: 20px auto;
+    padding: 16px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 2px solid #333;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 
+      0 4px 16px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .digital-time{
+    font-size: 32px;
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0,255,136,0.5);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .digital-date{
+    font-size: 16px;
+    color: #4aefff;
+    text-shadow: 0 0 6px rgba(74,239,255,0.4);
+    margin-bottom: 4px;
+  }
+
+  .digital-day{
+    font-size: 14px;
+    color: #cfe;
+    opacity: 0.8;
   }
 
   /* ===== Credit ===== */
@@ -228,6 +300,9 @@
   <button id="playYouTubeBtn" class="youtube-btn">▶️ Play YouTube</button>
   
   <div id="videoContainer" class="video-container">
+    <div class="video-controls">
+      <button id="minimizeBtn" class="minimize-btn">─ Minimize</button>
+    </div>
     <iframe 
       id="youtubeIframe"
       src=""
@@ -238,6 +313,13 @@
   </div>
   
   <p style="color:#cfe; font-size:12px; opacity:0.8; margin-top:8px;">Nikmati musik sambil menjelajahi ruangan</p>
+</div>
+
+<!-- Digital Clock -->
+<div id="digitalClock">
+  <div class="digital-time" id="digitalTime">00:00:00</div>
+  <div class="digital-date" id="digitalDate">1 Januari 2024</div>
+  <div class="digital-day" id="digitalDay">Senin</div>
 </div>
 
 <!-- Marquee -->
