@@ -277,15 +277,41 @@
 
 <!-- File Tree -->
 <div class="tree" aria-label="File List">
-  <div class="folder" id="folderToggle" tabindex="0">MY-ROOM/</div>
+  <div class="folder" id="folderToggle" tabindex="0">MY-PROFILE/</div>
   <div class="content-wrapper" id="treeWrap" aria-hidden="true">
     <div class="content" id="treeContent">
-      ├── <a href="#src">src/</a><br/>
-      │ &nbsp; ├── <a href="#app">app.py</a><br/>
-      │ &nbsp; ├── <a href="#db">db.py</a><br/>
-      ├── <a href="#config">config/</a><br/>
-      │ &nbsp; ├── <a href="#settings">settings.json</a><br/>
-      │ &nbsp; ├── <a href="#env">env.py</a><br/>
+      ├── <a href="#profile">Profile-Pribardi-Int</a><br/>
+      │ &nbsp; ├── <a href="#name">Nama-Lengkap</a><br/>
+      │ &nbsp; ├── <a href="#tgl">Tempat-Tanggal-Lahir</a><br/>
+      │ &nbsp; ├── <a href="#loc">Alamat-Lengkap</a><br/>
+      │ &nbsp; ├── <a href="#pen">Pendidikan-Lengkap</a><br/>
+      │ &nbsp; ├── <a href="#peng">Pengalaman-Lengkap</a><br/>
+      │ &nbsp; ├── <a href="#hoby">Hoby</a><br/>
+      ├── <a href="#sosmed">Social-Media-Int</a><br/>
+      │ &nbsp; ├── <a href="#ig">Instagram</a><br/>
+      │ &nbsp; ├── <a href="#fb">Facebook</a><br/>
+      │ &nbsp; ├── <a href="#twit">Twitter</a><br/>
+      │ &nbsp; ├── <a href="#linkedin">Linkedin</a><br/>
+      ├── <a href="#source">Source-Code-Tools</a><br/>
+      │ &nbsp; ├── <a href="#dis">Disclaimer</a><br/>
+      │ &nbsp; ├── <a href="https://sundowndev.github.io/phoneinfoga/">Phoneinfoga</a><br/>
+      │ &nbsp; ├── <a href="https://www.maltego.com/">Maltego</a><br/>
+      │ &nbsp; ├── <a href="https://github.com/">Github</a><br/>
+      │ &nbsp; ├── <a href="https://osintframework.com/">osintframework</a><br/>
+      │ &nbsp; ├── <a href="https://tryhackme.com/">TryHackMe("PALING GUA SUKA INI WEB")</a><br/>
+      │ &nbsp; ├── <a href="https://www.exploit-db.com/">Exploit-DB</a><br/>
+      │ &nbsp; ├── <a href="https://www.metasploit.com/">Metasploit</a><br/>
+      │ &nbsp; ├── <a href="#pri">Privasi-Clean-UP</a><br/>
+      │ &nbsp; ├── <a href="https://github.com/TeehanLax/Hyperlapse.js">Google-Street-View</a><br/>
+      ├── <a href="#buku">Favourite-Book</a><br/>
+      │ &nbsp; ├── <a href="https://www.google.com/search?q=book+python+programming+for+beginners&client=ubuntu-sn&hs=2md&sca_esv=cb6d5bace73091a1&channel=fs&sxsrf=AE3TifOq2ngixBX84CJkayYaVJ2-sAQwtw%3A1755340684892&ei=jF-gaKGbNqv2seMPq9rnmAw&oq=book+python+programming+for+&gs_lp=Egxnd3Mtd2l6LXNlcnAiHGJvb2sgcHl0aG9uIHByb2dyYW1taW5nIGZvciAqAggAMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMggQABgWGAoYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHkjxWlC-C1jpS3ABeAGQAQKYAZMLoAHdRKoBDzAuNy4xLjMuMS4yLjEuM7gBAcgBAPgBAZgCEaAC4zLCAgoQABiwAxjWBBhHwgINEAAYgAQYsAMYQxiKBcICCBAuGIAEGMsBwgIIEAAYgAQYywHCAgUQABiABMICFxAuGIAEGMsBGJcFGNwEGN4EGOAE2AEBmAMAiAYBkAYKugYGCAEQARgUkgcPMS42LjIuMi4zLjEuMS4xoAfLmAGyBw8wLjYuMi4yLjMuMS4xLjG4B8AywgcGNC0xNi4xyAf_Ag&sclient=gws-wiz-serp">Book-Python-Terlengkap</a><br/>
+      │ &nbsp; ├── <a href="https://www.google.com/search?q=book+Javascript+programming+for+beginners&client=ubuntu-sn&hs=ond&sca_esv=cb6d5bace73091a1&channel=fs&sxsrf=AE3TifPKM2pV4SQU6k8AWWurv4N1MJmsRQ%3A1755340732690&ei=vF-gaMn1KYeGnesPsO-C2AQ&ved=0ahUKEwjJw9PmkY-PAxUHQ2cHHbC3AEsQ4dUDCA8&uact=5&oq=book+Javascript+programming+for+beginners&gs_lp=Egxnd3Mtd2l6LXNlcnAiKWJvb2sgSmF2YXNjcmlwdCBwcm9ncmFtbWluZyBmb3IgYmVnaW5uZXJzMgUQABjvBTIIEAAYgAQYogQyBRAAGO8FMgUQABjvBTIFEAAY7wVIlENQoRNY8TVwBXgBkAEAmAGCAqAB5gmqAQU2LjQuMbgBA8gBAPgBAZgCD6ACswvCAgoQABiwAxjWBBhHwgIIEAAYBxgIGB7CAgYQABgIGB7CAggQABgIGA0YHsICBBAhGAqYAwCIBgGQBgiSBwc3LjcuMC4xoAeWQrIHBzIuNy4wLjG4B4YKwgcJMi00LjMuNy4xyAeEAg&sclient=gws-wiz-serp">Buku-Javascript-Terlengkap</a><br/>
+      │ &nbsp; ├── <a href="https://www.google.com/search?q=book+NodeJS+programming+for+beginners&client=ubuntu-sn&hs=Opd&sca_esv=cb6d5bace73091a1&channel=fs&sxsrf=AE3TifMN6TEiqSfCTtZvKalyC9MPwPaluA%3A1755340830682&ei=HmCgaJi6Kf6wwcsPpqPmmAY&ved=0ahUKEwiYwbCVko-PAxV-WHADHaaRGWMQ4dUDCA8&uact=5&oq=book+NodeJS+programming+for+beginners&gs_lp=Egxnd3Mtd2l6LXNlcnAiJWJvb2sgTm9kZUpTIHByb2dyYW1taW5nIGZvciBiZWdpbm5lcnMyBRAAGO8FMgUQABjvBTIFEAAY7wUyCBAAGIAEGKIEMgUQABjvBUi3GlDSCljNF3ACeAGQAQCYAcsBoAGuBqoBBTIuMy4xuAEDyAEA-AEBmAIHoALIBsICChAAGLADGNYEGEfCAggQABgIGA0YHpgDAIgGAZAGCJIHBTIuNC4xoAfGFrIHBTAuNC4xuAeIBsIHBTMtNi4xyAdq&sclient=gws-wiz-serp">Buku-NodeJS-Terlengkap</a><br/>
+      │ &nbsp; ├── <a href="https://www.google.com/search?q=book+Golang+programming+for+beginners&client=ubuntu-sn&hs=Eqd&sca_esv=cb6d5bace73091a1&channel=fs&sxsrf=AE3TifNtgi5VcGtDYeKEJLbDk-nXvKpS3Q%3A1755340882481&ei=UmCgaMOTHfGwwcsPnLrqoAI&ved=0ahUKEwjDhIquko-PAxVxWHADHRydGiQQ4dUDCA8&uact=5&oq=book+Golang+programming+for+beginners&gs_lp=Egxnd3Mtd2l6LXNlcnAiJWJvb2sgR29sYW5nIHByb2dyYW1taW5nIGZvciBiZWdpbm5lcnMyCBAAGIAEGKIEMggQABiABBiiBDIIEAAYgAQYogQyBRAAGO8FMgUQABjvBUijD1CyCFi3DnACeAGQAQCYAboBoAGkBKoBAzMuMrgBA8gBAPgBAZgCBaAC6QLCAgoQABiwAxjWBBhHwgIIEAAYBxgIGB6YAwCIBgGQBgiSBwMzLjKgB-8TsgcDMS4yuAetAsIHBTMtNC4xyAdS&sclient=gws-wiz-serp">Buku-Golang-Terlengkap</a><br/>
+      │ &nbsp; ├── <a href="https://www.google.com/search?q=book+HTML%2CCSS+programming+for+beginners&client=ubuntu-sn&hs=YWy&sca_esv=cb6d5bace73091a1&channel=fs&sxsrf=AE3TifPDd_EWxdj9VtShl73sC7uYSIT65g%3A1755340945496&ei=kWCgaIH_HYienesPo8DLkAo&ved=0ahUKEwjBi5DMko-PAxUIT2cHHSPgEqIQ4dUDCA8&uact=5&oq=book+HTML%2CCSS+programming+for+beginners&gs_lp=Egxnd3Mtd2l6LXNlcnAiJ2Jvb2sgSFRNTCxDU1MgcHJvZ3JhbW1pbmcgZm9yIGJlZ2lubmVyczIFEAAY7wUyBRAAGO8FMgUQABjvBTIFEAAY7wUyBRAAGO8FSNHIAlDN_wFY7qoCcAl4AZABAJgBrAGgAckIqgEDOS4yuAEDyAEA-AEBmAIToALiCsICChAAGLADGNYEGEfCAggQABgHGAgYHsICCBAAGIAEGKIEwgIEECEYCpgDAIgGAZAGCJIHBDEyLjegB9EksgcDMy43uAeDCcIHCDItMS4xNS4zyAeTAg&sclient=gws-wiz-serp">Buku-HTML&CSS-Terlengkap</a><br/>
+      │ &nbsp; ├── <a href="https://www.google.com/search?q=book+c%2B%2B+programming+for+beginners&client=ubuntu-sn&hs=NXy&sca_esv=cb6d5bace73091a1&channel=fs&sxsrf=AE3TifOV9WzuJBDakAAKzC8lQOsmgoWD0w%3A1755340996894&ei=xGCgaImtNuX4seMPvoK64Qk&ved=0ahUKEwiJn9Hkko-PAxVlfGwGHT6BLpwQ4dUDCA8&uact=5&oq=book+c%2B%2B+programming+for+beginners&gs_lp=Egxnd3Mtd2l6LXNlcnAiImJvb2sgYysrIHByb2dyYW1taW5nIGZvciBiZWdpbm5lcnMyBhAAGAgYHjIGEAAYCBgeMgYQABgIGB4yBhAAGAgYHjIGEAAYCBgeMggQABiABBiiBDIFEAAY7wUyBRAAGO8FMgUQABjvBUixb1CWB1jaZXAFeAGQAQCYAeIIoAGLEKoBCzMuMy4wLjEuNy0xuAEDyAEA-AEBmAIMoALED8ICChAAGLADGNYEGEfCAgYQABgHGB7CAggQABgFGAcYHsICCBAAGAcYCBgewgIEECEYCpgDAIgGAZAGCJIHBzYuNS43LTGgB8s3sgcHMS41LjctMbgH2A7CBwcyLTEuNy40yAe5AQ&sclient=gws-wiz-serp">Buku-C++-Terlengkap</a><br/>
+      │ &nbsp; ├── <a href="https://archive.org/details/beginners-step-by-step-coding-course-learn-computer-programming-the-easy-way-uk-edition">How-Can-I-To-Be-Progranning</a><br/>
+      └───────── <a href="config">config.xml</a><br/>
     </div>
   </div>
 </div>
@@ -690,7 +716,7 @@ playYouTubeBtn.addEventListener('click', ()=>{
   playYouTubeBtn.style.display = 'none';
   
   // Set iframe source with autoplay
-  youtubeIframe.src = 'https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=0&loop=1&playlist=jfKfPfyJRdk&controls=1&modestbranding=1&rel=0';
+  youtubeIframe.src = 'https://www.youtube.com/embed/DjbWDdlvFpA?autoplay=1&mute=0&loop=1&playlist=jfKfPfyJRdk&controls=1&modestbranding=1&rel=0';
   
   // Show video with TV turn-on effect
   setTimeout(() => {
