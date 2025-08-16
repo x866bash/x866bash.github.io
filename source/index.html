@@ -392,12 +392,18 @@ function typewriter(arr, speed=50){
       return; 
     }
     if(ci < arr[li].length){
-      termBody.textContent += arr[li][ci++];
+      // Tambahkan karakter satu per satu
+      const currentChar = arr[li][ci];
+      const span = document.createElement('span');
+      span.textContent = currentChar;
+      termBody.appendChild(span);
+      ci++;
       setTimeout(tick, speed);
     }else{
-      termBody.innerHTML += "<br>";
+      // Tambahkan line break dengan spasi ekstra untuk pemisahan yang jelas
+      termBody.innerHTML += "<br><br>";
       li++; ci=0;
-      setTimeout(tick, 360);
+      setTimeout(tick, 500); // Delay lebih lama antar baris
     }
   })();
 }
