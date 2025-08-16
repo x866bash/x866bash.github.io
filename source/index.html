@@ -729,39 +729,9 @@ playYouTubeBtn.addEventListener('click', ()=>{
 /* =========================
    Digital Clock
 ========================= */
-const elemenWaktu   = document.getElementById('teksWaktu');
-    const elemenTanggal = document.getElementById('teksTanggal');
-    const elemenHari    = document.getElementById('teksHari');
 
-    // Format Bahasa Indonesia
-    const formatTanggal = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    const formatHari    = new Intl.DateTimeFormat('id-ID', { weekday: 'long' });
 
-    function tampilkanWaktu(sekarang) {
-      const jam   = sekarang.getHours();
-      const menit = sekarang.getMinutes();
-      const detik = sekarang.getSeconds();
 
-      elemenWaktu.textContent   = `${duaDigit(jam)}:${duaDigit(menit)}:${duaDigit(detik)}`;
-      elemenTanggal.textContent = formatTanggal.format(sekarang);
-      elemenHari.textContent    = formatHari.format(sekarang);
-    }
-
-    function jalankanJam() {
-      const sekarang = new Date();
-      tampilkanWaktu(sekarang);
-      const ms = sekarang.getMilliseconds();
-      setTimeout(jalankanJam, 1000 - ms);
-    }
-
-    // Mulai pertama kali
-    tampilkanWaktu(new Date());
-    jalankanJam();
-
-    // Pastikan update saat tab kembali aktif
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) tampilkanWaktu(new Date());
-    });
 /* =========================
    SAFETY
 ========================= */
