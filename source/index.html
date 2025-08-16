@@ -344,37 +344,35 @@ function animateShatter(){
   else shCanvas.style.display='none';
 }
 
-enterBtn.addEventListener('click', async () => {
-    // tampilkan loading
-    loading.style.display = 'flex';
+enterBtn.addEventListener('click', async ()=>{
+  // Tampilkan loading dulu 5 detik
+  popup.style.display='none';
+  loading.style.display='flex';
 
-    // tunggu 5 detik
-    setTimeout(async () => {
-        // ambil ukuran popup sebelum disembunyikan
-        const r = glassCard.getBoundingClientRect();
+  // siapkan suara
+  const glassSfx = document.getElementById('glassSfx');
 
-        // pecahkan kaca
-        createShardsFromRect(r);
+  setTimeout(async ()=>{
+    // ambil rect popup (posisi kaca)
+    const r = glassCard.getBoundingClientRect();
+    shCanvas.style.display='none';
+    createShardsFromRect(r);
 
-        // mainkan suara kaca
-        try {
-            await glassSfx.play();
-        } catch (e) {
-            glassSfx.muted = false;
-            try { await glassSfx.play(); } catch {}
-        }
+    // mainkan suara (fallback bila perlu)
+    try{ await glassSfx.play(); }catch(e){
+      // jika autoplay diblok, coba pakai play setelah interaksi sudah terjadi (sudah klik)
+      glassSfx.muted=false;
+      try{ await glassSfx.play(); }catch(_e){}
+    }
 
-        // animasi pecahan
-        animateShatter();
+    	loading.style.display='flex';
+    animateShatter();
 
-        // sembunyikan popup & loading
-        popup.style.display = 'none';
-        loading.style.display = 'none';
-
-        // tampilkan terminal
-        showTerminal();
-    }, 5000);
+    // lalu tampilkan terminal
+    showTerminal();
+  }, 1000); // 5 detik
 });
+
 
 
 
