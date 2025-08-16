@@ -365,12 +365,12 @@ enterBtn.addEventListener('click', async ()=>{
       try{ await glassSfx.play(); }catch(_e){}
     }
 
-    	setTimeout(() => {
-        loadingText.style.display = "none"; // sembunyikan memuat...
-        animateShatter();
-        triggerGlassBreak(); // jalankan efek kaca pecah
-        document.getElementById("welcomePoup")loading.style.display = "none"; // tutup popup
-    }, 5000); // tunggu 5 detik
+    	loading.style.display='flex';
+    animateShatter();
+
+    // lalu tampilkan terminal
+    showTerminal();
+  }, 5000); // 5 detik
 });
 
 
