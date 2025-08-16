@@ -166,95 +166,98 @@
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_21d8e34aa5.mp3" type="audio/mpeg">
 </audio>
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Popup Glass Shatter</title>
+<style>
+  body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  #welcomePopup {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.6);
+    z-index: 10;
+  }
+  #glassCard {
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  #enterBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #0af;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  #loading {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.8);
+    z-index: 9;
+    font-size: 2em;
+  }
+  #terminal {
+    position: fixed;
+    inset: 0;
+    background: black;
+    color: #0f0;
+    padding: 20px;
+    display: none;
+    font-family: monospace;
+  }
+  #glassCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+  }
+</style>
+</head>
+<body>
+
+<!-- Popup -->
+<div id="welcomePopup">
+  <div id="glassCard">
+    <h1>Selamat Datang</h1>
+    <p>Klik tombol di bawah untuk masuk</p>
+    <button id="enterBtn">Masuk</button>
+  </div>
+</div>
+
+<!-- Loading Screen -->
+<div id="loading">Loading...</div>
+
+<!-- Terminal Placeholder -->
+<div id="terminal">Terminal aktif...</div>
+
+<!-- Canvas Pecahan Kaca -->
+<canvas id="glassCanvas"></canvas>
+
+<!-- Suara Kaca Pecah -->
+<audio id="glassSfx" src="glass-break.mp3" preload="auto"></audio>
+
 <script>
 /* =========================
-   UTIL
-========================= */
-const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-
-/* =========================
-   BACKGROUND: awan + petir
-========================= */
-const bg = document.getElementById('bgCanvas');
-const bctx = bg.getContext('2d');
-let W,H, clouds=[], bolts=[];
-function resizeBG(){ W=bg.width=innerWidth; H=bg.height=innerHeight }
-addEventListener('resize', resizeBG); resizeBG();
-
-function makeCloud(){
-  // cloud = kumpulan blob
-  const parts = Math.floor(4+Math.random()*5);
-  const blobs=[];
-  const y = Math.random()*H*0.5 + 20;
-  let x = Math.random()*W;
-  const speed = .15 + Math.random()*.35;
-  for(let i=0;i<parts;i++){
-    blobs.push({
-      x: x + i*30 + Math.random()*40,
-      y: y + (Math.random()*40-20),
-      r: 50+Math.random()*90
-    });
-  }
-  return {blobs, speed};
-}
-for(let i=0;i<6;i++) clouds.push(makeCloud());
-
-function spawnBolt(){
-  // Petir zigzag sederhana
-  const x = Math.random()*W;
-  const seg = 12 + Math.floor(Math.random()*8);
-  const path = [{x, y:0}];
-  for(let i=1;i<=seg;i++){
-    path.push({
-      x: x + (Math.random()*60-30),
-      y: (H/seg)*i + Math.random()*10
-    });
-  }
-  bolts.push({path, life:0});
-}
-setInterval(spawnBolt, 4200 + Math.random()*1800);
-
-function drawBG(){
-  bctx.clearRect(0,0,W,H);
-
-  // awan
-  bctx.fillStyle = 'rgba(255,255,255,0.10)';
-  clouds.forEach(c=>{
-    c.blobs.forEach(p=>{
-      bctx.beginPath();
-      bctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      bctx.fill();
-      p.x -= c.speed;
-    });
-    // reset saat keluar kiri
-    if(c.blobs[c.blobs.length-1].x + c.blobs[c.blobs.length-1].r < 0){
-      const n = makeCloud();
-      c.blobs = n.blobs; c.speed = n.speed;
-    }
-  });
-
-  // petir
-  for(let i=bolts.length-1;i>=0;i--){
-    const bolt = bolts[i];
-    const alpha = 1 - bolt.life/14;
-    bctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-    bctx.lineWidth = 2;
-    bctx.beginPath();
-    bctx.moveTo(bolt.path[0].x, bolt.path[0].y);
-    for(let j=1;j<bolt.path.length;j++){
-      bctx.lineTo(bolt.path[j].x, bolt.path[j].y);
-    }
-    bctx.stroke();
-    bolt.life++;
-    if(bolt.life>14) bolts.splice(i,1);
-  }
-
-  requestAnimationFrame(drawBG);
-}
-drawBG();
-
-/* =========================
-   POPUP → LOADING (10s) → SHATTER → TERMINAL
+   POPUP → LOADING (5s) → SHATTER → TERMINAL
 ========================= */
 const popup = document.getElementById('welcomePopup');
 const glassCard = document.getElementById('glassCard');
@@ -262,31 +265,37 @@ const enterBtn = document.getElementById('enterBtn');
 const loading = document.getElementById('loading');
 const shCanvas = document.getElementById('glassCanvas');
 const sctx = shCanvas.getContext('2d');
-function resizeSh(){ shCanvas.width=innerWidth; shCanvas.height=innerHeight }
-addEventListener('resize', resizeSh); resizeSh();
+
+function resizeSh() {
+  shCanvas.width = innerWidth;
+  shCanvas.height = innerHeight;
+}
+addEventListener('resize', resizeSh);
+resizeSh();
 
 let shards = [];
 
-function createShardsFromRect(rect){
-  shards.length=0;
+// Membuat pecahan kaca dari posisi popup
+function createShardsFromRect(rect) {
+  shards.length = 0;
   const colors = [
-    [220,240,255], // biru pucat
-    [255,255,255], // putih pucat
-    [200,220,230]  // abu kaca
+    [220, 240, 255], // biru pucat
+    [255, 255, 255], // putih pucat
+    [200, 220, 230]  // abu kaca
   ];
   const PIECES = 44; // jumlah pecahan
-  for(let i=0;i<PIECES;i++){
-    const size = 10 + Math.random()*28;
-    const alpha = .45 + Math.random()*.35;
-    const col = colors[(Math.random()*colors.length)|0];
+  for (let i = 0; i < PIECES; i++) {
+    const size = 10 + Math.random() * 28;
+    const alpha = .45 + Math.random() * .35;
+    const col = colors[(Math.random() * colors.length) | 0];
     shards.push({
-      x: rect.left + Math.random()*rect.width,
-      y: rect.top  + Math.random()*rect.height,
-      dx: (Math.random()-.5)*13,
-      dy: (Math.random()-.5)*13,
-      rot: Math.random()*Math.PI*2,
-      drot: (Math.random()-.5)*.28,
-      g: .32 + Math.random()*.18,
+      x: rect.left + Math.random() * rect.width,
+      y: rect.top + Math.random() * rect.height,
+      dx: (Math.random() - .5) * 13,
+      dy: (Math.random() - .5) * 13,
+      rot: Math.random() * Math.PI * 2,
+      drot: (Math.random() - .5) * .28,
+      g: .32 + Math.random() * .18,
       air: .992, // gesekan
       size,
       alpha,
@@ -295,7 +304,8 @@ function createShardsFromRect(rect){
   }
 }
 
-function drawShard(s){
+// Menggambar pecahan kaca
+function drawShard(s) {
   sctx.save();
   sctx.translate(s.x, s.y);
   sctx.rotate(s.rot);
@@ -303,8 +313,8 @@ function drawShard(s){
   // segitiga tak beraturan
   sctx.beginPath();
   sctx.moveTo(0, 0);
-  sctx.lineTo(s.size,  s.size*.45);
-  sctx.lineTo(-s.size*.55, s.size*.95);
+  sctx.lineTo(s.size, s.size * .45);
+  sctx.lineTo(-s.size * .55, s.size * .95);
   sctx.closePath();
 
   // isi (kaca)
@@ -312,24 +322,25 @@ function drawShard(s){
   sctx.fill();
 
   // highlight tipis
-  sctx.strokeStyle = `rgba(255,255,255,${Math.min(1, s.alpha+.15)})`;
+  sctx.strokeStyle = `rgba(255,255,255,${Math.min(1, s.alpha + .15)})`;
   sctx.lineWidth = 1;
   sctx.stroke();
 
   // garis highlight internal kecil
   sctx.beginPath();
-  sctx.moveTo(-s.size*.2, s.size*.2);
-  sctx.lineTo(s.size*.35, s.size*.05);
-  sctx.strokeStyle = `rgba(255,255,255,${s.alpha*.6})`;
+  sctx.moveTo(-s.size * .2, s.size * .2);
+  sctx.lineTo(s.size * .35, s.size * .05);
+  sctx.strokeStyle = `rgba(255,255,255,${s.alpha * .6})`;
   sctx.lineWidth = .6;
   sctx.stroke();
 
   sctx.restore();
 }
 
-function animateShatter(){
-  sctx.clearRect(0,0,shCanvas.width, shCanvas.height);
-  for(let i=shards.length-1;i>=0;i--){
+// Animasi pecahan kaca jatuh + gravitasi
+function animateShatter() {
+  sctx.clearRect(0, 0, shCanvas.width, shCanvas.height);
+  for (let i = shards.length - 1; i >= 0; i--) {
     const s = shards[i];
     drawShard(s);
     s.x += s.dx;
@@ -338,169 +349,58 @@ function animateShatter(){
     s.dx *= s.air;
     s.rot += s.drot;
     s.alpha -= .0065;
-    if(s.alpha<=0 || s.y-100>innerHeight) shards.splice(i,1);
+    if (s.alpha <= 0 || s.y - 100 > innerHeight) shards.splice(i, 1);
   }
-  if(shards.length>0) requestAnimationFrame(animateShatter);
-  else shCanvas.style.display='none';
+  if (shards.length > 0) {
+    requestAnimationFrame(animateShatter);
+  } else {
+    shCanvas.style.display = 'none';
+  }
 }
 
-enterBtn.addEventListener('click', async ()=>{
-  // Tampilkan loading dulu 5 detik
-  popup.style.display='none';
-  loading.style.display='flex';
+// Fungsi tampilkan terminal
+function showTerminal() {
+  document.getElementById('terminal').style.display = 'block';
+}
 
-  // siapkan suara
+// Klik tombol masuk
+enterBtn.addEventListener('click', async () => {
+  // Hilangkan popup, tampilkan loading
+  popup.style.display = 'none';
+  loading.style.display = 'flex';
+
+  // Ambil elemen audio
   const glassSfx = document.getElementById('glassSfx');
 
-  setTimeout(async ()=>{
-    // ambil rect popup (posisi kaca)
+  // Tunggu 5 detik sebelum pecah kaca
+  setTimeout(async () => {
+    // Ambil posisi kaca
     const r = glassCard.getBoundingClientRect();
-    shCanvas.style.display='none';
+
+    // Pastikan canvas pecahan terlihat
+    shCanvas.style.display = 'block';
     createShardsFromRect(r);
 
-    // mainkan suara (fallback bila perlu)
-    try{ await glassSfx.play(); }catch(e){
-      // jika autoplay diblok, coba pakai play setelah interaksi sudah terjadi (sudah klik)
-      glassSfx.muted=false;
-      try{ await glassSfx.play(); }catch(_e){}
+    // Mainkan suara (fallback jika autoplay diblokir)
+    try {
+      await glassSfx.play();
+    } catch (e) {
+      glassSfx.muted = false;
+      try { await glassSfx.play(); } catch (_e) { }
     }
 
-    	loading.style.display='flex';
+    // Jalankan animasi pecahan
     animateShatter();
 
-    // lalu tampilkan terminal
+    // Hapus loading, tampilkan terminal
+    loading.style.display = 'none';
     showTerminal();
-  }, 1000); // 5 detik
-});
 
-
-
-
-/* =========================
-   TERMINAL (slide + typewriter + theme)
-========================= */
-const terminal = document.getElementById('terminal');
-const termBody = document.getElementById('termBody');
-const themeToggle = document.getElementById('themeToggle');
-
-const lines = [
-  "WELCOME TO MY ROOM",
-  "selamat datang di ruangan saya",
-  "ini adalah ruangan yang gk ada apa apa nya di banding kalian yang banyak kreasi,",
-  "saya cuma pelajar yang baru buat scrip simple dengan bantuan ChatGPT,",
-  "jika suka dengan ruangan saya bisa yaudah haveFUN ye nO coMMEnt ye."
-];
-
-function showTerminal(){
-  terminal.classList.add('show');
-  typewriter(lines, 46);
-}
-
-function typewriter(arr, speed=50){
-  termBody.innerHTML = "";
-  let li=0, ci=0;
-  termBody.classList.add('caret');
-  (function tick(){
-    if(li>=arr.length){ termBody.classList.remove('caret'); return; }
-    if(ci < arr[li].length){
-      termBody.textContent += arr[li][ci++];
-      setTimeout(tick, speed);
-    }else{
-      termBody.textContent += "\n";
-      li++; ci=0;
-      setTimeout(tick, 360);
-    }
-  })();
-}
-
-themeToggle.addEventListener('click', ()=> terminal.classList.toggle('light'));
-
-/* =========================
-   FILE TREE (smooth expand on click)
-========================= */
-const folderToggle = document.getElementById('folderToggle');
-const treeWrap = document.getElementById('treeWrap');
-folderToggle.addEventListener('click', ()=>{
-  const open = treeWrap.style.maxHeight && treeWrap.style.maxHeight !== '0px';
-  if(open){
-    treeWrap.style.maxHeight='0px';
-    treeWrap.setAttribute('aria-hidden','true');
-  }else{
-    treeWrap.style.maxHeight = treeWrap.scrollHeight + 'px';
-    treeWrap.setAttribute('aria-hidden','false');
-  }
-});
-folderToggle.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); folderToggle.click(); }});
-
-/* =========================
-   JAM ANALOG CLASSIC (canvas)
-========================= */
-const clock = document.getElementById('clockCanvas');
-const cctx = clock.getContext('2d');
-function drawClock(){
-  const w = clock.width, h = clock.height, r = Math.min(w,h)/2 - 26;
-  cctx.clearRect(0,0,w,h);
-  cctx.save();
-  cctx.translate(w/2,h/2);
-
-  // face
-  const grad = cctx.createRadialGradient(0,0, r*.05, 0,0, r*1.08);
-  grad.addColorStop(0,'#1a1a1a'); grad.addColorStop(1,'#000');
-  cctx.fillStyle = grad;
-  cctx.beginPath(); cctx.arc(0,0,r*1.02,0,Math.PI*2); cctx.fill();
-
-  // bezel
-  cctx.strokeStyle='rgba(255,255,255,.2)';
-  cctx.lineWidth=6; cctx.beginPath(); cctx.arc(0,0,r*1.02,0,Math.PI*2); cctx.stroke();
-
-  // ticks
-  for(let i=0;i<60;i++){
-    cctx.rotate(Math.PI/30);
-    cctx.beginPath();
-    cctx.moveTo(0,-r*0.90);
-    cctx.lineWidth = (i%5===0)? 4:1.6;
-    cctx.strokeStyle = (i%5===0)? 'rgba(255,255,255,.9)':'rgba(255,255,255,.5)';
-    cctx.lineTo(0,-r*0.84);
-    cctx.stroke();
-  }
-
-  const now = new Date();
-  let hr = now.getHours()%12;
-  let mn = now.getMinutes();
-  let sc = now.getSeconds();
-
-  // hands
-  function hand(angle, len, width, color){
-    cctx.save();
-    cctx.rotate(angle);
-    cctx.strokeStyle=color; cctx.lineWidth=width; cctx.lineCap='round';
-    cctx.beginPath(); cctx.moveTo(0, r*0.1); cctx.lineTo(0, -len); cctx.stroke();
-    cctx.restore();
-  }
-  const secA = sc*Math.PI/30;
-  const minA = (mn+sc/60)*Math.PI/30;
-  const hrA  = (hr+mn/60)*Math.PI/6;
-
-  hand(hrA,  r*0.50, 6, 'rgba(255,255,255,.95)');
-  hand(minA, r*0.68, 4, 'rgba(255,255,255,.9)');
-  hand(secA, r*0.75, 2, '#e33');
-
-  // center cap
-  cctx.fillStyle='#e33';
-  cctx.beginPath(); cctx.arc(0,0,5,0,Math.PI*2); cctx.fill();
-
-  cctx.restore();
-}
-setInterval(drawClock, 1000); drawClock();
-
-/* =========================
-   SAFETY: Resize tree max-height after images/fonts settle
-========================= */
-addEventListener('load', ()=>{
-  if(treeWrap.style.maxHeight && treeWrap.style.maxHeight!=='0px'){
-    treeWrap.style.maxHeight = treeWrap.scrollHeight + 'px';
-  }
+  }, 5000); // 5 detik
 });
 </script>
+</body>
+</html>
+
 </body>
 </html>
