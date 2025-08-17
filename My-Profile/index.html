@@ -2,358 +2,272 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Profil & Kalender</title>
+  <title>Profile Pribadi</title>
   <style>
     body {
       margin: 0;
-      font-family: "Times New Roman", serif;
-      background: #f4f1ea url('hd.png');
+      font-family: 'Times New Roman', serif;
+      background: #f4f1ec url('hd.png');
       background-size: cover;
       color: #222;
-      overflow-x: hidden;
     }
-
-    h1 {
+    h1, h2 {
       text-align: center;
-      padding: 20px;
-      background: #222;
-      color: white;
-      letter-spacing: 3px;
+      font-family: 'Georgia', serif;
     }
-
+    /* LIST PROFIL */
     .profile-list {
       max-width: 800px;
-      margin: 20px auto;
-      border: 2px solid #333;
+      margin: 40px auto;
+      border: 2px solid #444;
       padding: 20px;
-      background: rgba(255,255,255,0.9);
-    }
-    .profile-list h2 {
-      text-align: center;
-      border-bottom: 2px solid #333;
-      margin-bottom: 20px;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
     .folder {
-      border-bottom: 1px solid #333;
-      padding: 15px;
       cursor: pointer;
-      position: relative;
+      padding: 12px;
+      margin: 8px 0;
+      border: 2px solid #444;
       font-weight: bold;
-      transition: background 0.3s;
+      background: linear-gradient(90deg, #f5e1c8, #e2c290);
+      position: relative;
+      overflow: hidden;
     }
-    .folder:hover {
-      background: #eee;
+    .folder::before {
+      content: "⚡";
+      position: absolute;
+      left: -20px;
+      animation: lightning 2s infinite;
+    }
+    @keyframes lightning {
+      0%, 95%, 100% { opacity: 0; }
+      96% { opacity: 1; color: yellow; }
     }
     .content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 1s ease, transform 1s ease;
-      transform: translateX(0);
-      padding: 0 10px;
+      transition: all 0.6s ease;
+      padding-left: 20px;
     }
-    .folder.open + .content {
-      max-height: 200px;
-      transform: translateX(-20px);
+    .content.open {
+      max-height: 500px;
+      margin-bottom: 10px;
     }
-
-    /* Kalender */
+    /* KALENDER */
     .calendar-container {
       max-width: 900px;
       margin: 40px auto;
-      text-align: center;
-      border: 2px solid #333;
-      background: white;
+      background: #fff;
+      border: 3px solid #444;
       padding: 20px;
-      border-radius: 10px;
       position: relative;
+      overflow: hidden;
     }
     .calendar-header {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      position: relative;
-    }
-    .calendar-header h3 {
-      margin: 0;
     }
     .calendar-header button {
-      padding: 5px 10px;
+      padding: 6px 12px;
       cursor: pointer;
-      border: none;
-      background: #333;
-      color: white;
-      border-radius: 5px;
-      margin: 0 10px;
-    }
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-    }
-    .day {
-      padding: 10px;
-      border: 1px solid #ccc;
-      min-height: 60px;
-      position: relative;
-      transition: transform 0.3s;
-    }
-    .day:hover {
-      transform: scale(1.05);
-      background: #f9f3d7;
-    }
-    .sunday { color: red; }
-    .friday { color: green; }
-    .today {
-      background: #3f87f5;
-      color: white;
-      font-weight: bold;
-    }
-    .holiday {
-      background: #ffdddd;
-      cursor: pointer;
-      position: relative;
-    }
-    .holiday:hover::after {
-      content: attr(data-holiday);
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: white;
-      padding: 5px 10px;
-      font-size: 12px;
-      white-space: nowrap;
-      border-radius: 5px;
-    }
-
-    /* Jam di dalam kalender pojok kanan */
-    .clock-container {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .clock {
-      font-size: 16px;
+      position: absolute;
+      top: 10px;
+      right: 20px;
       font-weight: bold;
-      color: #333;
     }
-    select {
-      padding: 2px 5px;
-      font-size: 12px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
-
-    /* Tombol Lihat Kalender */
-    #lihatKalenderBtn {
-      margin: 10px;
-      padding: 10px 20px;
-      cursor: pointer;
-      border: none;
-      background: crimson;
-      color: white;
-      font-size: 16px;
-      border-radius: 5px;
-      transition: 0.3s;
+    th, td {
+      border: 1px solid #aaa;
+      text-align: center;
+      padding: 8px;
+      width: 14.28%;
     }
-    #lihatKalenderBtn:hover {
-      background: darkred;
-    }
-
-    /* Kalender toggle animasi */
-    #calendarContent {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 1s ease;
-    }
-    #calendarContent.open {
-      max-height: 1500px;
-    }
-
-    /* SI VIS PACEM PARA BELLUM */
-    .fire-text {
+    .sunday { color: red; font-weight: bold; }
+    .friday { color: green; font-weight: bold; }
+    .today { background: lightblue; border-radius: 50%; }
+    .holiday { background: pink; cursor: pointer; }
+    .holiday:hover { background: red; color: white; transition: 0.3s; }
+    /* SI VIS PACEM */
+    .motto {
       text-align: center;
       font-size: 28px;
       font-weight: bold;
-      color: red;
-      margin-top: 20px;
-      text-transform: uppercase;
-      animation: fireGlow 1s infinite alternate;
+      margin: 40px 0 10px;
+      background: linear-gradient(to right, darkred, orange, yellow);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fire 1.5s infinite;
     }
-    @keyframes fireGlow {
-      from { text-shadow: 0 0 5px orange, 0 0 10px red; }
-      to { text-shadow: 0 0 20px yellow, 0 0 30px orangered; }
+    @keyframes fire {
+      0% { text-shadow: 0 0 5px red, 0 0 10px orange; }
+      50% { text-shadow: 0 0 15px yellow, 0 0 20px red; }
+      100% { text-shadow: 0 0 5px red, 0 0 10px orange; }
     }
     footer {
       text-align: center;
-      margin-top: 20px;
-      padding: 10px;
+      padding: 20px;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
   <h1>INFORMASI - PROFIL - PRIBADI</h1>
-
   <div class="profile-list">
-    <h2>Data Pribadi</h2>
     <div class="folder">Nama-Lengkap</div>
     <div class="content"><p>MUHAMMAD JANUAR RAMDANI</p></div>
+
     <div class="folder">Tempat-Tanggal-Lahir</div>
     <div class="content"><p>25 JANUARI 2000</p></div>
+
     <div class="folder">Alamat-Lengkap</div>
-    <div class="content"><p>Alamat Berdomisili: Jl Merpati 2, Gg H Unus RT 05 RW 01, LARANGAN SELATAN, LARANGAN, TANGERANG</p></div>
-    <div class="content"><p>Alamat KTP: Taman sekartanjung Block E 16, RT 16 RW 01, PARUNG PANJANG, BOGOR.</p></div>
+    <div class="content">
+      <p><strong>Alamat Berdomisili:</strong> Jl Merpati 2, Gg H Unus RT 05 RW 01, LARANGAN SELATAN, LARANGAN, TANGERANG</p>
+      <p><strong>Alamat KTP:</strong> Taman sekartanjung Block E 16, RT 16 RW 01, PARUNG PANJANG, BOGOR</p>
+    </div>
+
     <div class="folder">Pendidikan-Lengkap</div>
     <div class="content"><p>SMK MULIA BUANA ("ADMINISTRASI PERKANTORAN")</p></div>
+
     <div class="folder">Pengalaman-Lengkap</div>
-    <div class="content"><p>Loading...</p></div>
+    <div class="content">
+      <p><strong>Tahun Kerja 2018 (1 Bulan)</strong></p>
+      <p>Keterangan pengalaman saya di perusahaan X</p>
+      <p>Keterangan pekerjaan saya: Administrasi & Input Data</p>
+      <hr>
+      <p><strong>Tahun Kerja 2020 - 2021</strong></p>
+      <p>Keterangan pengalaman saya di perusahaan Y</p>
+      <p>Keterangan pekerjaan saya: Customer Service</p>
+    </div>
+
     <div class="folder">Hoby</div>
     <div class="content"><p>KEPOAN ONLINE</p></div>
   </div>
 
-  <!-- Tombol toggle -->
-  <div style="text-align:center;">
-    <button id="lihatKalenderBtn">Lihat Kalender</button>
-  </div>
-
-  <div id="calendarContent">
-    <div class="calendar-container">
-      <div class="clock-container">
-        <div class="clock" id="clock"></div>
-        <select id="timeFormat">
-          <option value="24">24 Jam</option>
-          <option value="12">12 Jam</option>
-        </select>
-      </div>
-      <div class="calendar-header">
-        <button id="prevMonth">&lt;</button>
-        <h3 id="monthYear"></h3>
-        <button id="nextMonth">&gt;</button>
-      </div>
-      <div class="calendar-grid" id="calendar"></div>
+  <!-- Kalender -->
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button id="prev-month">&lt;</button>
+      <h2 id="month-year"></h2>
+      <button id="next-month">&gt;</button>
     </div>
+    <div class="clock" id="clock"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Minggu</th>
+          <th>Senin</th>
+          <th>Selasa</th>
+          <th>Rabu</th>
+          <th>Kamis</th>
+          <th>Jumat</th>
+          <th>Sabtu</th>
+        </tr>
+      </thead>
+      <tbody id="calendar-body"></tbody>
+    </table>
   </div>
 
-  <div class="fire-text">SI VIS PACEM PARA BELLUM</div>
+  <div class="motto">SI VIS PACEM PARA BELLUM</div>
+  <footer>Create by : ME</footer>
 
-  <footer>
-    <p>Create by : ME</p>
-  </footer>
-
-  <script>
-    // Folder toggle
-    document.querySelectorAll('.folder').forEach(folder => {
-      folder.addEventListener('click', () => {
-        folder.classList.toggle('open');
-      });
+<script>
+  // ==== PROFIL OPEN/CLOSE ====
+  document.querySelectorAll(".folder").forEach(folder=>{
+    folder.addEventListener("click",()=>{
+      folder.nextElementSibling.classList.toggle("open");
     });
+  });
 
-    // Kalender
-    const calendarEl = document.getElementById('calendar');
-    const monthYearEl = document.getElementById('monthYear');
-    const lihatKalenderBtn = document.getElementById('lihatKalenderBtn');
-    const calendarContent = document.getElementById('calendarContent');
-    let today = new Date();
-    let currentMonth = today.getMonth();
-    let currentYear = today.getFullYear();
+  // ==== HARI LIBUR NASIONAL INDONESIA 2025 ====
+  const holidays = {
+    "2025-01-01": "Tahun Baru Masehi",
+    "2025-01-29": "Isra Mikraj Nabi Muhammad SAW",
+    "2025-03-28": "Hari Raya Nyepi (Tahun Baru Saka 1947)",
+    "2025-04-18": "Wafat Isa Al Masih",
+    "2025-04-20": "Hari Paskah",
+    "2025-05-01": "Hari Buruh Internasional",
+    "2025-05-12": "Hari Raya Idul Fitri 1446 H",
+    "2025-05-13": "Cuti Bersama Idul Fitri",
+    "2025-05-29": "Kenaikan Isa Al Masih",
+    "2025-06-01": "Hari Lahir Pancasila",
+    "2025-06-06": "Hari Raya Idul Adha 1446 H",
+    "2025-06-27": "Tahun Baru Islam 1447 H",
+    "2025-08-17": "Hari Kemerdekaan Republik Indonesia",
+    "2025-09-05": "Maulid Nabi Muhammad SAW",
+    "2025-12-25": "Hari Raya Natal",
+    "2025-12-26": "Cuti Bersama Natal"
+  };
 
-    const monthNames = [
-      "Januari","Februari","Maret","April","Mei","Juni",
-      "Juli","Agustus","September","Oktober","November","Desember"
-    ];
-    const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  // ==== KALENDER ====
+  const calendarBody = document.getElementById("calendar-body");
+  const monthYear = document.getElementById("month-year");
+  let currentDate = new Date(2025,7,1); // default Agustus 2025
 
-    const holidays = {
-      "2025-08-17": "Hari Kemerdekaan Indonesia"
-    };
-
-    function renderCalendar(month, year) {
-      calendarEl.innerHTML = "";
-      monthYearEl.textContent = monthNames[month] + " " + year;
-
-      // Header hari
-      dayNames.forEach(d => {
-        const div = document.createElement("div");
-        div.textContent = d;
-        div.style.fontWeight = "bold";
-        calendarEl.appendChild(div);
-      });
-
-      let firstDay = new Date(year, month, 1).getDay();
-      let daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement("div");
-        calendarEl.appendChild(empty);
-      }
-
-      for (let date = 1; date <= daysInMonth; date++) {
-        const day = new Date(year, month, date).getDay();
-        const div = document.createElement("div");
-        div.classList.add("day");
-        if (day === 0) div.classList.add("sunday");
-        if (day === 5) div.classList.add("friday");
-
-        const todayCheck = new Date();
-        if (date === todayCheck.getDate() && month === todayCheck.getMonth() && year === todayCheck.getFullYear()) {
-          div.classList.add("today");
+  function generateCalendar(year, month) {
+    calendarBody.innerHTML = "";
+    const firstDay = new Date(year, month).getDay();
+    const daysInMonth = new Date(year, month+1,0).getDate();
+    const monthNames = ["Januari","Februari","Maret","April","Mei","Juni",
+      "Juli","Agustus","September","Oktober","November","Desember"];
+    monthYear.textContent = `${monthNames[month]} ${year}`;
+    let date = 1;
+    for (let i=0;i<6;i++) {
+      let row=document.createElement("tr");
+      for (let j=0;j<7;j++) {
+        let cell=document.createElement("td");
+        if (i===0 && j<firstDay) {
+          cell.innerHTML="";
+        } else if (date>daysInMonth) {
+          break;
+        } else {
+          const fullDate = `${year}-${String(month+1).padStart(2,"0")}-${String(date).padStart(2,"0")}`;
+          cell.textContent=date;
+          if (j===0) cell.classList.add("sunday");
+          if (j===5) cell.classList.add("friday");
+          const today=new Date();
+          if (date===today.getDate() && month===today.getMonth() && year===today.getFullYear()){
+            cell.classList.add("today");
+          }
+          if (holidays[fullDate]){
+            cell.classList.add("holiday");
+            cell.title=holidays[fullDate];
+          }
+          row.appendChild(cell);
+          date++;
         }
-
-        let holidayKey = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
-        if (holidays[holidayKey]) {
-          div.classList.add("holiday");
-          div.setAttribute("data-holiday", `${date} ${monthNames[month]}: ${holidays[holidayKey]}`);
-        }
-
-        div.textContent = date;
-        calendarEl.appendChild(div);
       }
+      calendarBody.appendChild(row);
     }
+  }
 
-    document.getElementById('prevMonth').onclick = () => {
-      currentMonth--;
-      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-      renderCalendar(currentMonth, currentYear);
-    };
-    document.getElementById('nextMonth').onclick = () => {
-      currentMonth++;
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-      renderCalendar(currentMonth, currentYear);
-    };
+  document.getElementById("prev-month").onclick=()=>{
+    currentDate.setMonth(currentDate.getMonth()-1);
+    generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+  };
+  document.getElementById("next-month").onclick=()=>{
+    currentDate.setMonth(currentDate.getMonth()+1);
+    generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+  };
 
-    renderCalendar(currentMonth, currentYear);
+  // ==== JAM REALTIME ====
+  function updateClock(){
+    const now=new Date();
+    document.getElementById("clock").textContent=now.toLocaleTimeString();
+  }
+  setInterval(updateClock,1000);
+  updateClock();
 
-    // Toggle kalender
-    lihatKalenderBtn.onclick = () => {
-      calendarContent.classList.toggle("open");
-    };
-
-    // Jam real-time dengan opsi format
-    let format = "24";
-    const clockEl = document.getElementById("clock");
-    const formatSelect = document.getElementById("timeFormat");
-
-    formatSelect.addEventListener("change", () => {
-      format = formatSelect.value;
-      updateClock();
-    });
-
-    function updateClock() {
-      const now = new Date();
-      let timeStr;
-      if (format === "24") {
-        timeStr = now.toLocaleTimeString("id-ID", {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false});
-      } else {
-        timeStr = now.toLocaleTimeString("en-US", {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true});
-      }
-      clockEl.textContent = timeStr;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
+  // Init kalender
+  generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+</script>
 </body>
 </html>
 
