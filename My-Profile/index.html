@@ -65,12 +65,14 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
+      position: relative;
     }
     .calendar-header {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       margin-bottom: 10px;
+      position: relative;
     }
     .calendar-header h3 {
       margin: 0;
@@ -82,6 +84,7 @@
       background: #333;
       color: white;
       border-radius: 5px;
+      margin: 0 10px;
     }
     .calendar-grid {
       display: grid;
@@ -125,14 +128,23 @@
       border-radius: 5px;
     }
 
-    /* Jam di pojok kanan atas */
-    .clock {
+    /* Jam di dalam kalender pojok kanan */
+    .clock-container {
       position: absolute;
-      top: 10px;
+      top: 15px;
       right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .clock {
       font-size: 16px;
       font-weight: bold;
       color: #333;
+    }
+    select {
+      padding: 2px 5px;
+      font-size: 12px;
     }
 
     /* Tombol Lihat Kalender */
@@ -188,17 +200,17 @@
   <div class="profile-list">
     <h2>Data Pribadi</h2>
     <div class="folder">Nama-Lengkap</div>
-    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="content"><p>Contoh konten...</p></div>
     <div class="folder">Tempat-Tanggal-Lahir</div>
-    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="content"><p>Contoh konten...</p></div>
     <div class="folder">Alamat-Lengkap</div>
-    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="content"><p>Contoh konten...</p></div>
     <div class="folder">Pendidikan-Lengkap</div>
-    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="content"><p>Contoh konten...</p></div>
     <div class="folder">Pengalaman-Lengkap</div>
-    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="content"><p>Contoh konten...</p></div>
     <div class="folder">Hoby</div>
-    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="content"><p>Contoh konten...</p></div>
   </div>
 
   <!-- Tombol toggle -->
@@ -208,7 +220,13 @@
 
   <div id="calendarContent">
     <div class="calendar-container">
-      <div class="clock" id="clock"></div>
+      <div class="clock-container">
+        <div class="clock" id="clock"></div>
+        <select id="timeFormat">
+          <option value="24">24 Jam</option>
+          <option value="12">12 Jam</option>
+        </select>
+      </div>
       <div class="calendar-header">
         <button id="prevMonth">&lt;</button>
         <h3 id="monthYear"></h3>
@@ -248,14 +266,7 @@
     const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
 
     const holidays = {
-      "2025-01-01": "Tahun Baru Masehi",
-      "2025-03-31": "Nyepi",
-      "2025-04-18": "Wafat Isa Almasih",
-      "2025-05-01": "Hari Buruh",
-      "2025-05-29": "Kenaikan Isa Almasih",
-      "2025-06-01": "Hari Lahir Pancasila",
-      "2025-08-17": "Hari Ulang Tahun Indonesia Raya",
-      "2025-12-25": "Natal"
+      "2025-08-17": "Hari Kemerdekaan Indonesia"
     };
 
     function renderCalendar(month, year) {
@@ -273,13 +284,11 @@
       let firstDay = new Date(year, month, 1).getDay();
       let daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // Kosong sebelum tanggal 1
       for (let i = 0; i < firstDay; i++) {
         const empty = document.createElement("div");
         calendarEl.appendChild(empty);
       }
 
-      // Isi tanggal
       for (let date = 1; date <= daysInMonth; date++) {
         const day = new Date(year, month, date).getDay();
         const div = document.createElement("div");
@@ -321,11 +330,25 @@
       calendarContent.classList.toggle("open");
     };
 
-    // Jam
+    // Jam real-time dengan opsi format
+    let format = "24";
+    const clockEl = document.getElementById("clock");
+    const formatSelect = document.getElementById("timeFormat");
+
+    formatSelect.addEventListener("change", () => {
+      format = formatSelect.value;
+      updateClock();
+    });
+
     function updateClock() {
       const now = new Date();
-      document.getElementById("clock").textContent = 
-        now.toLocaleTimeString("id-ID", {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+      let timeStr;
+      if (format === "24") {
+        timeStr = now.toLocaleTimeString("id-ID", {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false});
+      } else {
+        timeStr = now.toLocaleTimeString("en-US", {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true});
+      }
+      clockEl.textContent = timeStr;
     }
     setInterval(updateClock, 1000);
     updateClock();
