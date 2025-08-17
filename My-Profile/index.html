@@ -13,24 +13,6 @@
       overflow-x: hidden;
     }
 
-    /* ===== Efek buka buku ===== */
-    .book-overlay {
-      position: fixed;
-      top: 0; right: 0;
-      width: 100%;
-      height: 100%;
-      background: #fff url('https://www.transparenttextures.com/patterns/newsprint.png');
-      background-size: auto;
-      z-index: 9999;
-      transform-origin: right center;
-      animation: bookOpen 2s forwards ease-in-out;
-    }
-
-    @keyframes bookOpen {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(-100deg); }
-    }
-
     header {
       text-align: center;
       padding: 20px;
@@ -114,24 +96,37 @@
     }
 
     /* Calendar */
-    .calendar {
+    .calendar-container {
       margin: 40px auto;
-      padding: 20px;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .clock {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .calendar {
       border: 2px solid #222;
       border-radius: 8px;
       background: #fff;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-
-    .calendar h2 {
-      margin: 0 0 10px 0;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
     table {
       border-collapse: collapse;
       width: 100%;
+      margin-top: 5px;
     }
 
     th, td {
@@ -143,6 +138,23 @@
     th {
       background: #eee;
     }
+
+    td.sunday { color: red; font-weight: bold; }
+    td.friday { color: green; font-weight: bold; }
+    td.today { background: lightblue; font-weight: bold; border-radius: 5px; }
+    td.holiday { background: pink; color: red; }
+
+    button {
+      padding: 8px 15px;
+      margin-bottom: 15px;
+      border: none;
+      background: #333;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #555; }
 
     /* Fire Text */
     .fire-text {
@@ -170,9 +182,6 @@
   </style>
 </head>
 <body>
-  <!-- Overlay buku -->
-  <div class="book-overlay"></div>
-
   <header>INFORMASI - PROFIL - PRIBADI</header>
 
   <div class="list-container">
@@ -180,77 +189,142 @@
     <ul class="oriental-list">
       <li>Nama-Lengkap
         <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna, tergantung pada konteksnya. Secara umum, "default" berarti lalai, tidak melakukan sesuatu yang seharusnya dilakukan, atau cacat. Namun, dalam konteks teknologi informasi, "default" seringkali merujuk pada bawaan, standar, atau pengaturan awal.</div>
+        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
       </li>
       <li>Tempat-Tanggal-Lahir
         <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna, tergantung pada konteksnya. Secara umum, "default" berarti lalai, tidak melakukan sesuatu yang seharusnya dilakukan, atau cacat. Namun, dalam konteks teknologi informasi, "default" seringkali merujuk pada bawaan, standar, atau pengaturan awal.</div>
+        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
       </li>
       <li>Alamat-Lengkap
         <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna, tergantung pada konteksnya. Secara umum, "default" berarti lalai, tidak melakukan sesuatu yang seharusnya dilakukan, atau cacat. Namun, dalam konteks teknologi informasi, "default" seringkali merujuk pada bawaan, standar, atau pengaturan awal.</div>
+        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
       </li>
       <li>Pendidikan-Lengkap
         <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna, tergantung pada konteksnya. Secara umum, "default" berarti lalai, tidak melakukan sesuatu yang seharusnya dilakukan, atau cacat. Namun, dalam konteks teknologi informasi, "default" seringkali merujuk pada bawaan, standar, atau pengaturan awal.</div>
+        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
       </li>
       <li>Pengalaman-Lengkap
         <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna, tergantung pada konteksnya. Secara umum, "default" berarti lalai, tidak melakukan sesuatu yang seharusnya dilakukan, atau cacat. Namun, dalam konteks teknologi informasi, "default" seringkali merujuk pada bawaan, standar, atau pengaturan awal.</div>
+        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
       </li>
       <li>Hoby
         <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna, tergantung pada konteksnya. Secara umum, "default" berarti lalai, tidak melakukan sesuatu yang seharusnya dilakukan, atau cacat. Namun, dalam konteks teknologi informasi, "default" seringkali merujuk pada bawaan, standar, atau pengaturan awal.</div>
+        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
       </li>
     </ul>
   </div>
 
-  <div class="calendar" id="calendar"></div>
+  <div class="calendar-container">
+    <button id="toggleBtn">Lihat Kalender</button>
+    <div id="calendars"></div>
+  </div>
+
   <div class="fire-text">SI VIS PACEM PARA BELLUM</div>
   <footer>Create by : ME</footer>
 
   <script>
-    // Toggle list content + lightning
+    // Lightning toggle
     document.querySelectorAll('.oriental-list li').forEach(li => {
       li.addEventListener('click', () => {
         let content = li.querySelector('.content');
         let lightning = li.querySelector('.lightning');
-
-        // Flash lightning
         lightning.classList.add('flash');
         setTimeout(() => lightning.classList.remove('flash'), 300);
-
-        // Toggle content
         content.classList.toggle('show');
       });
     });
 
-    // Calendar Generator
-    function generateCalendar(year) {
-      let calendar = document.getElementById('calendar');
-      let date = new Date(year, 0, 1);
-      let days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+    // Daftar libur nasional Indonesia (contoh, tahun 2025 sebagian)
+    const holidays = {
+      "2025-01-01": "Tahun Baru Masehi",
+      "2025-03-31": "Nyepi",
+      "2025-04-18": "Wafat Isa Almasih",
+      "2025-05-01": "Hari Buruh",
+      "2025-05-29": "Kenaikan Isa Almasih",
+      "2025-06-01": "Hari Lahir Pancasila",
+      "2025-08-17": "Hari Kemerdekaan RI",
+      "2025-12-25": "Natal"
+    };
 
-      let html = `<h2>Kalender ${year}</h2><table><tr>`;
-      days.forEach(d => { html += `<th>${d}</th>`; });
-      html += "</tr><tr>";
+    const monthNames = [
+      "Januari","Februari","Maret","April","Mei","Juni",
+      "Juli","Agustus","September","Oktober","November","Desember"
+    ];
 
-      // Padding awal
+    function generateMonth(year, month) {
+      let date = new Date(year, month, 1);
+      let today = new Date();
+      let days = ["Min","Sen","Sel","Rab","Kam","Jum","Sab"];
+      let html = `
+        <div class="calendar">
+          <div class="calendar-header">
+            <h3>${monthNames[month]} ${year}</h3>
+            <div class="clock" id="clock-${month}"></div>
+          </div>
+          <table>
+            <tr>${days.map(d=>`<th>${d}</th>`).join("")}</tr><tr>
+      `;
+
+      // padding awal
       for (let i=0; i<date.getDay(); i++) {
         html += "<td></td>";
       }
 
-      while (date.getFullYear() === year) {
-        html += `<td>${date.getDate()}</td>`;
-        if (date.getDay() === 6) html += "</tr><tr>";
+      while (date.getMonth() === month) {
+        let d = date.getDate();
+        let day = date.getDay();
+        let fullDate = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+
+        let cls = "";
+        if (day === 0) cls = "sunday";
+        if (day === 5) cls = "friday";
+        if (fullDate in holidays) cls = "holiday";
+        if (date.toDateString() === today.toDateString()) cls = "today";
+
+        html += `<td class="${cls}">${d}</td>`;
+
+        if (day === 6) html += "</tr><tr>";
         date.setDate(date.getDate()+1);
       }
-      html += "</tr></table>";
-      calendar.innerHTML = html;
+
+      html += "</tr></table></div>";
+      return html;
     }
 
-    let now = new Date();
-    generateCalendar(now.getFullYear());
+    function generateCalendar(year, onlyAugust=false) {
+      let container = document.getElementById("calendars");
+      container.innerHTML = "";
+      if (onlyAugust) {
+        container.innerHTML = generateMonth(year, 7);
+      } else {
+        for (let m=0; m<12; m++) {
+          container.innerHTML += generateMonth(year, m);
+        }
+      }
+    }
+
+    // Jam realtime di setiap kalender
+    function updateClocks() {
+      let now = new Date();
+      let time = now.toLocaleTimeString("id-ID");
+      document.querySelectorAll(".clock").forEach(el=>{
+        el.textContent = time;
+      });
+    }
+    setInterval(updateClocks, 1000);
+
+    // Default tampil Agustus
+    let currentYear = new Date().getFullYear();
+    generateCalendar(currentYear, true);
+
+    // Toggle button
+    let expanded = false;
+    document.getElementById("toggleBtn").addEventListener("click", ()=>{
+      expanded = !expanded;
+      generateCalendar(currentYear, !expanded);
+      document.getElementById("toggleBtn").textContent = expanded ? "Sembunyikan Kalender" : "Lihat Kalender";
+    });
   </script>
 </body>
 </html>
+
