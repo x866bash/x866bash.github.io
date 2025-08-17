@@ -2,239 +2,251 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Profil Pribadi</title>
+  <title>Profil & Kalender</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Times New Roman', serif;
-      background: #f5f5f5 url('https://www.transparenttextures.com/patterns/newsprint.png');
-      background-size: auto;
-      color: #111;
+      font-family: "Times New Roman", serif;
+      background: #f4f1ea url('https://www.transparenttextures.com/patterns/old-wall.png');
+      background-size: cover;
+      color: #222;
       overflow-x: hidden;
     }
 
-    header {
+    h1 {
       text-align: center;
       padding: 20px;
-      font-size: 2rem;
-      font-weight: bold;
-      border-bottom: 3px double #333;
+      background: #222;
+      color: white;
+      letter-spacing: 3px;
     }
 
-    .list-container {
+    .profile-list {
       max-width: 800px;
-      margin: 30px auto;
-      background: rgba(255,255,255,0.9);
+      margin: 20px auto;
       border: 2px solid #333;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,0.9);
     }
-
-    .list-title {
-      font-size: 1.5rem;
+    .profile-list h2 {
       text-align: center;
-      margin-bottom: 20px;
       border-bottom: 2px solid #333;
-      padding-bottom: 10px;
-      font-weight: bold;
+      margin-bottom: 20px;
     }
-
-    ul.oriental-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    ul.oriental-list li {
-      border-bottom: 2px solid #222;
+    .folder {
+      border-bottom: 1px solid #333;
       padding: 15px;
-      font-size: 1.2rem;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
+      font-weight: bold;
+      transition: background 0.3s;
     }
-
-    ul.oriental-list li:last-child {
-      border-bottom: none;
+    .folder:hover {
+      background: #eee;
     }
-
     .content {
       max-height: 0;
       overflow: hidden;
-      transition: all 0.7s ease;
-      transform: translateX(50%);
-      opacity: 0;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-top: 10px;
-    }
-
-    .content.show {
-      max-height: 300px;
+      transition: max-height 1s ease, transform 1s ease;
       transform: translateX(0);
-      opacity: 1;
+      padding: 0 10px;
+    }
+    .folder.open + .content {
+      max-height: 200px;
+      transform: translateX(-20px);
     }
 
-    /* Lightning effect */
-    .lightning {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: white;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .lightning.flash {
-      animation: flash 0.3s;
-    }
-
-    @keyframes flash {
-      0%,100% { opacity: 0; }
-      50% { opacity: 0.8; }
-    }
-
-    /* Calendar */
+    /* Kalender */
     .calendar-container {
+      max-width: 900px;
       margin: 40px auto;
-      max-width: 700px;
       text-align: center;
+      border: 2px solid #333;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
     }
-
     .calendar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
-
-    .clock {
-      font-size: 1rem;
-      font-weight: bold;
+    .calendar-header h3 {
+      margin: 0;
     }
-
-    .calendar {
-      border: 2px solid #222;
-      border-radius: 8px;
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 5px;
-    }
-
-    th, td {
-      border: 1px solid #222;
-      padding: 8px;
-      text-align: center;
-    }
-
-    th {
-      background: #eee;
-    }
-
-    td.sunday { color: red; font-weight: bold; }
-    td.friday { color: green; font-weight: bold; }
-    td.today { background: lightblue; font-weight: bold; border-radius: 5px; }
-    td.holiday { background: pink; color: red; }
-
-    button {
-      padding: 8px 15px;
-      margin-bottom: 15px;
+    .calendar-header button {
+      padding: 5px 10px;
+      cursor: pointer;
       border: none;
       background: #333;
       color: white;
       border-radius: 5px;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .day {
+      padding: 10px;
+      border: 1px solid #ccc;
+      min-height: 60px;
+      position: relative;
+      transition: transform 0.3s;
+    }
+    .day:hover {
+      transform: scale(1.05);
+      background: #f9f3d7;
+    }
+    .sunday { color: red; }
+    .friday { color: green; }
+    .today {
+      background: #3f87f5;
+      color: white;
+      font-weight: bold;
+    }
+    .holiday {
+      background: #ffdddd;
       cursor: pointer;
+      position: relative;
+    }
+    .holiday:hover::after {
+      content: attr(data-holiday);
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 5px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+      border-radius: 5px;
     }
 
-    button:hover { background: #555; }
+    /* Jam di pojok kanan atas */
+    .clock {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
 
-    /* Fire Text */
+    /* Tombol Lihat Kalender */
+    #lihatKalenderBtn {
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background: crimson;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    #lihatKalenderBtn:hover {
+      background: darkred;
+    }
+
+    /* Kalender toggle animasi */
+    #calendarContent {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 1s ease;
+    }
+    #calendarContent.open {
+      max-height: 1500px;
+    }
+
+    /* SI VIS PACEM PARA BELLUM */
     .fire-text {
-      margin-top: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background: linear-gradient(45deg, red, orange, yellow);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: burn 2s infinite alternate;
-      text-transform: uppercase;
-    }
-
-    @keyframes burn {
-      0% { text-shadow: 0 0 5px red, 0 0 10px orange; }
-      100% { text-shadow: 0 0 20px yellow, 0 0 40px red; }
-    }
-
-    footer {
-      margin-top: 20px;
       text-align: center;
-      font-size: 1rem;
+      font-size: 28px;
       font-weight: bold;
+      color: red;
+      margin-top: 20px;
+      text-transform: uppercase;
+      animation: fireGlow 1s infinite alternate;
+    }
+    @keyframes fireGlow {
+      from { text-shadow: 0 0 5px orange, 0 0 10px red; }
+      to { text-shadow: 0 0 20px yellow, 0 0 30px orangered; }
+    }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
-  <header>INFORMASI - PROFIL - PRIBADI</header>
+  <h1>INFORMASI - PROFIL - PRIBADI</h1>
 
-  <div class="list-container">
-    <div class="list-title">Profil</div>
-    <ul class="oriental-list">
-      <li>Nama-Lengkap
-        <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
-      </li>
-      <li>Tempat-Tanggal-Lahir
-        <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
-      </li>
-      <li>Alamat-Lengkap
-        <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
-      </li>
-      <li>Pendidikan-Lengkap
-        <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
-      </li>
-      <li>Pengalaman-Lengkap
-        <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
-      </li>
-      <li>Hoby
-        <div class="lightning"></div>
-        <div class="content">Kata "default" dalam bahasa Indonesia bisa merujuk pada beberapa makna...</div>
-      </li>
-    </ul>
+  <div class="profile-list">
+    <h2>Data Pribadi</h2>
+    <div class="folder">Nama-Lengkap</div>
+    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="folder">Tempat-Tanggal-Lahir</div>
+    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="folder">Alamat-Lengkap</div>
+    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="folder">Pendidikan-Lengkap</div>
+    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="folder">Pengalaman-Lengkap</div>
+    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
+    <div class="folder">Hoby</div>
+    <div class="content"><p>Kata "default" dalam bahasa Indonesia bisa merujuk ...</p></div>
   </div>
 
-  <div class="calendar-container">
-    <button id="toggleBtn">Lihat Kalender</button>
-    <div id="calendars"></div>
+  <!-- Tombol toggle -->
+  <div style="text-align:center;">
+    <button id="lihatKalenderBtn">Lihat Kalender</button>
+  </div>
+
+  <div id="calendarContent">
+    <div class="calendar-container">
+      <div class="clock" id="clock"></div>
+      <div class="calendar-header">
+        <button id="prevMonth">&lt;</button>
+        <h3 id="monthYear"></h3>
+        <button id="nextMonth">&gt;</button>
+      </div>
+      <div class="calendar-grid" id="calendar"></div>
+    </div>
   </div>
 
   <div class="fire-text">SI VIS PACEM PARA BELLUM</div>
-  <footer>Create by : ME</footer>
+
+  <footer>
+    <p>Create by : ME</p>
+  </footer>
 
   <script>
-    // Lightning toggle
-    document.querySelectorAll('.oriental-list li').forEach(li => {
-      li.addEventListener('click', () => {
-        let content = li.querySelector('.content');
-        let lightning = li.querySelector('.lightning');
-        lightning.classList.add('flash');
-        setTimeout(() => lightning.classList.remove('flash'), 300);
-        content.classList.toggle('show');
+    // Folder toggle
+    document.querySelectorAll('.folder').forEach(folder => {
+      folder.addEventListener('click', () => {
+        folder.classList.toggle('open');
       });
     });
 
-    // Daftar libur nasional Indonesia (contoh, tahun 2025 sebagian)
+    // Kalender
+    const calendarEl = document.getElementById('calendar');
+    const monthYearEl = document.getElementById('monthYear');
+    const lihatKalenderBtn = document.getElementById('lihatKalenderBtn');
+    const calendarContent = document.getElementById('calendarContent');
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    const monthNames = [
+      "Januari","Februari","Maret","April","Mei","Juni",
+      "Juli","Agustus","September","Oktober","November","Desember"
+    ];
+    const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+
     const holidays = {
       "2025-01-01": "Tahun Baru Masehi",
       "2025-03-31": "Nyepi",
@@ -242,88 +254,81 @@
       "2025-05-01": "Hari Buruh",
       "2025-05-29": "Kenaikan Isa Almasih",
       "2025-06-01": "Hari Lahir Pancasila",
-      "2025-08-17": "Hari Kemerdekaan RI",
+      "2025-08-17": "Hari Ulang Tahun Indonesia Raya",
       "2025-12-25": "Natal"
     };
 
-    const monthNames = [
-      "Januari","Februari","Maret","April","Mei","Juni",
-      "Juli","Agustus","September","Oktober","November","Desember"
-    ];
+    function renderCalendar(month, year) {
+      calendarEl.innerHTML = "";
+      monthYearEl.textContent = monthNames[month] + " " + year;
 
-    function generateMonth(year, month) {
-      let date = new Date(year, month, 1);
-      let today = new Date();
-      let days = ["Min","Sen","Sel","Rab","Kam","Jum","Sab"];
-      let html = `
-        <div class="calendar">
-          <div class="calendar-header">
-            <h3>${monthNames[month]} ${year}</h3>
-            <div class="clock" id="clock-${month}"></div>
-          </div>
-          <table>
-            <tr>${days.map(d=>`<th>${d}</th>`).join("")}</tr><tr>
-      `;
-
-      // padding awal
-      for (let i=0; i<date.getDay(); i++) {
-        html += "<td></td>";
-      }
-
-      while (date.getMonth() === month) {
-        let d = date.getDate();
-        let day = date.getDay();
-        let fullDate = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-
-        let cls = "";
-        if (day === 0) cls = "sunday";
-        if (day === 5) cls = "friday";
-        if (fullDate in holidays) cls = "holiday";
-        if (date.toDateString() === today.toDateString()) cls = "today";
-
-        html += `<td class="${cls}">${d}</td>`;
-
-        if (day === 6) html += "</tr><tr>";
-        date.setDate(date.getDate()+1);
-      }
-
-      html += "</tr></table></div>";
-      return html;
-    }
-
-    function generateCalendar(year, onlyAugust=false) {
-      let container = document.getElementById("calendars");
-      container.innerHTML = "";
-      if (onlyAugust) {
-        container.innerHTML = generateMonth(year, 7);
-      } else {
-        for (let m=0; m<12; m++) {
-          container.innerHTML += generateMonth(year, m);
-        }
-      }
-    }
-
-    // Jam realtime di setiap kalender
-    function updateClocks() {
-      let now = new Date();
-      let time = now.toLocaleTimeString("id-ID");
-      document.querySelectorAll(".clock").forEach(el=>{
-        el.textContent = time;
+      // Header hari
+      dayNames.forEach(d => {
+        const div = document.createElement("div");
+        div.textContent = d;
+        div.style.fontWeight = "bold";
+        calendarEl.appendChild(div);
       });
+
+      let firstDay = new Date(year, month, 1).getDay();
+      let daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Kosong sebelum tanggal 1
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        calendarEl.appendChild(empty);
+      }
+
+      // Isi tanggal
+      for (let date = 1; date <= daysInMonth; date++) {
+        const day = new Date(year, month, date).getDay();
+        const div = document.createElement("div");
+        div.classList.add("day");
+        if (day === 0) div.classList.add("sunday");
+        if (day === 5) div.classList.add("friday");
+
+        const todayCheck = new Date();
+        if (date === todayCheck.getDate() && month === todayCheck.getMonth() && year === todayCheck.getFullYear()) {
+          div.classList.add("today");
+        }
+
+        let holidayKey = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+        if (holidays[holidayKey]) {
+          div.classList.add("holiday");
+          div.setAttribute("data-holiday", `${date} ${monthNames[month]}: ${holidays[holidayKey]}`);
+        }
+
+        div.textContent = date;
+        calendarEl.appendChild(div);
+      }
     }
-    setInterval(updateClocks, 1000);
 
-    // Default tampil Agustus
-    let currentYear = new Date().getFullYear();
-    generateCalendar(currentYear, true);
+    document.getElementById('prevMonth').onclick = () => {
+      currentMonth--;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      renderCalendar(currentMonth, currentYear);
+    };
+    document.getElementById('nextMonth').onclick = () => {
+      currentMonth++;
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderCalendar(currentMonth, currentYear);
+    };
 
-    // Toggle button
-    let expanded = false;
-    document.getElementById("toggleBtn").addEventListener("click", ()=>{
-      expanded = !expanded;
-      generateCalendar(currentYear, !expanded);
-      document.getElementById("toggleBtn").textContent = expanded ? "Sembunyikan Kalender" : "Lihat Kalender";
-    });
+    renderCalendar(currentMonth, currentYear);
+
+    // Toggle kalender
+    lihatKalenderBtn.onclick = () => {
+      calendarContent.classList.toggle("open");
+    };
+
+    // Jam
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").textContent = 
+        now.toLocaleTimeString("id-ID", {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>
