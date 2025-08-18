@@ -1,4 +1,177 @@
-<section>
-    <h2>Info</h2>
-    <p>Deskripsi info</p>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beranda</title>
+<style>
+:root {
+  --accent: #76e4f7;
+  --bg-dark: #0e0f13;
+  --bg-light: #f4f4f4;
+  --text-dark: #111;
+  --text-light: #fff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  transition: background 0.4s, color 0.4s;
+  height: 100%;
+  overflow: hidden;
+}
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('./images/home1.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6);
+  z-index: -1;
+  transition: filter 0.4s, background-image 0.4s;
+}
+.hero.light::before {
+  background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('./images/home2.jpg');
+  filter: brightness(0.8);
+}
+.poem {
+  font-size: 1.2rem;
+  max-width: 600px;
+  line-height: 1.6;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  white-space: pre-line;
+}
+.time {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+.fire-animation {
+  margin-top: 20px;
+  font-size: 2rem;
+  animation: flicker 1s infinite;
+}
+@keyframes flicker {
+  0%, 100% { text-shadow: 0 0 4px #ff8, 0 0 8px #f80, 0 0 12px #f40; color: #ff0; }
+  50% { text-shadow: 0 0 6px #ff8, 0 0 10px #f80, 0 0 14px #f40; color: #ffa500; }
+}
+.top-buttons {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+}
+button {
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  padding: .5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.3s;
+}
+button:hover { background: rgba(0,0,0,0.7); }
+.menu-panel {
+  position: absolute;
+  top: 3.5rem;
+  left: 1rem;
+  background: rgba(0,0,0,0.6);
+  padding: .5rem 1rem;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  gap: .25rem;
+  backdrop-filter: blur(4px);
+}
+.menu-panel a {
+  color: white;
+  text-decoration: none;
+  font-size: .9rem;
+  padding: .25rem 0;
+}
+.menu-panel.show { display: flex; }
+</style>
+</head>
+<body>
+<section class="hero" id="hero">
+  <div class="top-buttons">
+    <button id="menuBtn" onclick="toggleMenu()">🏠 Home</button>
+    <button id="themeBtn" onclick="toggleTheme()">🌙 / ☀️</button>
+  </div>
+
+  <div class="menu-panel" id="menuPanel">
+    <a href="/">🔙 Back</a>
+    <a href="/info">ℹ️ Info</a>
+    <a href="/source">💻 Source</a>
+  </div>
+
+  <div class="poem" id="poemText">
+Kamu adalah 1 1 nya perempuan yang aku sayang, walaupun kita sudah tidak pacaran lagi, kamu lah 1 1 nya orang yang gak bakalan aku lupakan dan aku gk tega ngelakuin apa yang aku mau atau nyebarin aib kamu, mungkin aku sengaja kirim chat ke reza aku udah punya pacar 2 tahun padahal gk ada sama sekali, tapi yaudah gk papa biar kamu bener bener ngejauhin aku dari hidup ku, kan kamu maunya gk di kekang untuk hubungan kita waktu itu, dan kamu banyak banget cowo yang mau sama kamu, lebih baik aku mundur untuk selamanya dari pada aku masih melihat kamu bersama orang lain, apalagi aku sampai tahu jika ada yang buat kamu nangis, pasti akan aku buat dia gk ada di muka bumi ini. jadi, aku akan tinggal kan kamu selamanya. mudah mudahan di kemudian hari kamu bisa mengingatkan semua yang sudah kita lewati.
+  </div>
+
+  <div class="time" id="timeDisplay"></div>
+  <div class="time" id="elapsedDisplay"></div>
+  <div class="time" id="creditDisplay">Credit by : Dani</div>
+  <div class="fire-animation" id="fireAnim">🔥</div>
 </section>
+
+<script>
+function updateTime(){
+  const now = new Date();
+  const timeString = now.toLocaleTimeString();
+  const dateString = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('timeDisplay').textContent = `${dateString} | ${timeString}`;
+
+  // Hitung selisih waktu dari 20 Juli 2025
+  const startDate = new Date("2025-07-20T00:00:00");
+  let diff = now - startDate;
+  if (diff < 0) diff = 0;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById('elapsedDisplay').textContent = 
+    `Lost kontak sejak 20 Juli 2025: ${days} Hari ${hours} Jam ${minutes} Menit ${seconds} Detik sudah tidak komunikasi`;
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+function toggleTheme(){
+  const hero = document.getElementById('hero');
+  hero.classList.toggle('light');
+  const darkMode = !hero.classList.contains('light');
+  document.body.style.background = darkMode ? 'var(--bg-dark)' : 'var(--bg-light)';
+  document.body.style.color = darkMode ? 'var(--text-light)' : 'var(--text-dark)';
+  const fire = document.getElementById('fireAnim');
+  fire.textContent = darkMode ? '🔥' : '💡';
+  fire.style.animation = darkMode ? 'flicker 1s infinite' : 'none';
+}
+
+function toggleMenu(){
+  const panel = document.getElementById('menuPanel');
+  const btn = document.getElementById('menuBtn');
+  panel.classList.toggle('show');
+  btn.textContent = panel.classList.contains('show') ? '🔙 Back' : '🏠 Home';
+}
+</script>
+</body>
+</html>
