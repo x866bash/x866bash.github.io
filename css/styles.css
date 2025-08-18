@@ -145,45 +145,26 @@ nav ul li {
     z-index: 1;
 }
 
-/* ==========================
-   Responsive Layout untuk HP
-========================== */
-@media (max-width: 768px) {
-
-    /* Navigasi jadi kolom */
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    nav ul li {
-        margin: 5px 0;
-    }
-
-    /* Kotak navigasi menyesuaikan layar */
-    .nav-box {
-        width: 90%;
-        max-width: 300px;
-        height: auto;
-        padding: 12px;
-    }
-
-    .nav-box a {
-        font-size: 16px;
-    }
-
-    /* Popup tombol lebih kecil */
-    #enter-btn {
-        font-size: 16px;
-        padding: 12px 20px;
-    }
-
-    /* Konten teks lebih ramah layar kecil */
-    main {
-        padding: 15px;
-        text-align: center;
-        font-size: 16px;
-    }
+/* Glow effect untuk semua teks */
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff; /* Warna putih */
+  text-shadow: 
+    0 0 5px #00f7ff,   /* Glow utama warna biru muda */
+    0 0 10px #00f7ff,
+    0 0 20px #00f7ff,
+    0 0 40px #00e0ff;
+  background-color: #0d0d0d; /* Background gelap biar glow makin kelihatan */
 }
 
+/* Glow lebih kuat untuk heading */
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  color: #ffffff;
+  text-shadow: 
+    0 0 5px #ff00ff,
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 30px #ff00ff,
+    0 0 40px #ff00ff;
+}
