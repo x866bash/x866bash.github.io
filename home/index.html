@@ -13,13 +13,17 @@
   --text-light: #fff;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  scroll-behavior: smooth;
+}
 body {
   font-family: Arial, sans-serif;
   background: var(--bg-dark);
   color: var(--text-light);
   transition: background 0.4s, color 0.4s;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .hero {
   position: relative;
@@ -27,16 +31,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   padding: 20px;
-  overflow: hidden;
 }
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('/images/home1.jpg');
+  background-image: linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.75)), url('images/home1.jpg');
   background-size: cover;
   background-position: center;
   filter: brightness(0.6);
@@ -44,7 +47,7 @@ body {
   transition: filter 0.4s, background-image 0.4s;
 }
 .hero.light::before {
-  background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('/images/home2.jpg');
+  background-image: linear-gradient(to bottom right, rgba(255,255,255,.35), rgba(255,255,255,.55)), url('images/home2.jpg');
   filter: brightness(0.8);
 }
 .poem {
@@ -53,6 +56,7 @@ body {
   line-height: 1.6;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
   white-space: pre-line;
+  margin-top: 80px;
 }
 .time {
   margin-top: 20px;
@@ -75,6 +79,7 @@ body {
   right: 1rem;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: .5rem;
 }
 button {
@@ -107,6 +112,32 @@ button:hover { background: rgba(0,0,0,0.7); }
   padding: .25rem 0;
 }
 .menu-panel.show { display: flex; }
+
+/* Responsive untuk HP */
+@media (max-width: 600px) {
+  .poem {
+    font-size: 1rem;
+    padding: 10px;
+    margin-top: 60px;
+  }
+  .time {
+    font-size: 0.9rem;
+  }
+  button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .top-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  .menu-panel {
+    left: auto;
+    right: 1rem;
+    font-size: 0.8rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -114,6 +145,9 @@ button:hover { background: rgba(0,0,0,0.7); }
   <div class="top-buttons">
     <button id="menuBtn" onclick="toggleMenu()">🏠 Home</button>
     <button id="themeBtn" onclick="toggleTheme()">🌙 / ☀️</button>
+    <button onclick="document.getElementById('creditDisplay').scrollIntoView({behavior: 'smooth'});">
+      ⬇️ Scroll ke Credit
+    </button>
   </div>
 
   <div class="menu-panel" id="menuPanel">
@@ -186,3 +220,4 @@ function toggleMenu(){
 </script>
 </body>
 </html>
+
