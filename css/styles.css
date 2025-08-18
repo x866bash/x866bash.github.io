@@ -1,240 +1,201 @@
-/* Slideshow Background */
-.slideshow-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1;
-}
+ /* =========================
+       GLOBAL
+    ========================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      color: #fff;
+      background: #0e0f13;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    h2, p {
+      text-align: center;
+      margin: 20px;
+    }
 
-.slideshow {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
+    /* =========================
+       SLIDESHOW
+    ========================= */
+    .slideshow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      perspective: 1px;
+      transform-style: preserve-3d;
+    }
+    .slideshow {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      will-change: opacity, transform;
+    }
+    .slide.active {
+      opacity: 1;
+    }
 
-.slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-}
+    /* =========================
+       POPUP
+    ========================= */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+    .popup.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .popup-background img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      opacity: 0.4;
+    }
+    .popup-content {
+      position: relative;
+      text-align: center;
+    }
 
-/* Hanya slide aktif yang terlihat */
-.slide.active {
-    opacity: 1;
-}
+    /* Tombol masuk glowing pulse */
+    #enter-btn {
+      background: linear-gradient(90deg, #00c3ff, #76e4f7);
+      color: #fff;
+      font-size: 1.2em;
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00c3ff,
+                  0 0 20px #00c3ff,
+                  0 0 30px #76e4f7;
+      animation: pulseGlow 2s infinite;
+      transition: transform 0.3s ease;
+    }
+    #enter-btn:hover {
+      transform: scale(1.05);
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 5px #00c3ff, 0 0 10px #76e4f7; }
+      50% { box-shadow: 0 0 20px #00c3ff, 0 0 40px #76e4f7; }
+      100% { box-shadow: 0 0 5px #00c3ff, 0 0 10px #76e4f7; }
+    }
 
-/* Popup Full-Screen */
-.popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.5s ease-out;
-}
+    /* =========================
+       NAVBAR
+    ========================= */
+    nav {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    .nav-box {
+      position: relative;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 6px 14px;
+      transition: 0.4s ease;
+    }
+    .nav-box:hover {
+      border-color: #76e4f7;
+      box-shadow: 0 0 10px #76e4f7,
+                  0 0 20px #00c3ff,
+                  0 0 30px #00c3ff;
+    }
+    .nav-link {
+      position: relative;
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #76e4f7;
+      text-shadow: 0 0 5px #76e4f7,
+                   0 0 10px #00c3ff,
+                   0 0 20px #00c3ff;
+    }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #76e4f7, #00c3ff);
+      box-shadow: 0 0 5px #76e4f7,
+                  0 0 10px #00c3ff,
+                  0 0 20px #00c3ff;
+      transition: width 0.4s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
 
-/* Popup Background */
-.popup-background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1;
-}
+    /* =========================
+       CONTENT
+    ========================= */
+    main {
+      padding: 100px 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    main.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-.popup-background img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.5; /* Bisa diatur lebih terang/gelap */
-}
+    /* Floating animasi teks */
+    main h2, main p {
+      animation: floaty 4s ease-in-out infinite;
+    }
+    @keyframes floaty {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
 
-/* Popup Tersembunyi */
-.popup.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Popup Content - Agar Tombol Muncul */
-.popup-content {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.6); /* Latar belakang tombol agar terlihat jelas */
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* Tombol Masuk */
-#enter-btn {
-    padding: 15px 30px;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-}
-
-#enter-btn:hover {
-    background: rgba(255, 255, 255, 0.5);
-    transform: scale(1.1);
-}
-
-/* Navigasi */
-nav {
-    display: none;
-    background: #1a1a1a;
-    padding: 15px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    padding: 0;
-}
-
-nav ul li {
-    position: relative;
-    margin: 0 15px;
-}
-
-/* Kotak Navigasi */
-.nav-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 120px;
-    height: 50px;
-    background: #333;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: background 0.3s;
-}
-
-.nav-box:hover {
-    background: #444;
-}
-
-/* Tombol Navigasi */
-.nav-box a {
-    text-decoration: none;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    position: relative;
-    z-index: 1;
-}
-
-/* Glow effect untuk semua teks */
-body {
-  font-family: 'Poppins', sans-serif;
-  color: #ffffff; /* Warna putih */
-  text-shadow: 
-    0 0 5px #00f7ff,   /* Glow utama warna biru muda */
-    0 0 10px #00f7ff,
-    0 0 20px #00f7ff,
-    0 0 40px #00e0ff;
-  background-color: #0d0d0d; /* Background gelap biar glow makin kelihatan */
-}
-
-/* Glow lebih kuat untuk heading */
-h1, h2, h3 {
-  font-family: 'Montserrat', sans-serif;
-  color: #ffffff;
-  text-shadow: 
-    0 0 5px #ff00ff,
-    0 0 10px #ff00ff,
-    0 0 20px #ff00ff,
-    0 0 30px #ff00ff,
-    0 0 40px #ff00ff;
-}
-
-/* ===============================
-   Efek kaca + multi-layer wave
-   =============================== */
-h2, p {
-  text-align: center;
-  width: 70%;
-  margin: 30px auto;
-  padding: 25px;
-  border-radius: 18px;
-  position: relative;
-  overflow: hidden;
-
-  /* Glassmorphism */
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  z-index: 1;
-}
-
-/* Ombak layer pertama */
-h2::before, p::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background: rgba(255, 255, 255, 0.15);
-  clip-path: polygon(
-    0% 65%, 10% 70%, 20% 65%, 30% 70%, 40% 65%, 
-    50% 70%, 60% 65%, 70% 70%, 80% 65%, 90% 70%, 100% 65%, 
-    100% 100%, 0% 100%
-  );
-  animation: waveSlow 8s infinite linear;
-  z-index: 0;
-}
-
-/* Ombak layer kedua */
-h2::after, p::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background: rgba(255, 255, 255, 0.25);
-  clip-path: polygon(
-    0% 60%, 10% 55%, 20% 60%, 30% 55%, 40% 60%, 
-    50% 55%, 60% 60%, 70% 55%, 80% 60%, 90% 55%, 100% 60%, 
-    100% 100%, 0% 100%
-  );
-  animation: waveFast 4s infinite linear;
-  opacity: 0.6;
-  z-index: 0;
-}
-
-/* Animasi gelombang lambat */
-@keyframes waveSlow {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* Animasi gelombang cepat */
-@keyframes waveFast {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
+    /* =========================
+       PAGE TRANSITION
+    ========================= */
+    body.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
