@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masalalu saya</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <script defer src="/js/script.js"></script>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Beranda</title>
@@ -133,50 +126,23 @@ button:hover { background: rgba(0,0,0,0.7); }
   }
 }
 </style>
-
 </head>
 <body>
+<section class="hero" id="hero">
+  <div class="top-buttons">
+    <button id="menuBtn" onclick="toggleMenu()">🏠 Home</button>
+    <button id="themeBtn" onclick="toggleTheme()">🌙 / ☀️</button>
+  </div>
 
-    <!-- Background Slideshow -->
-    <div class="slideshow-container">
-        <div class="slideshow">
-            <img src="/images/image1.jpg" class="slide active">
-            <img src="/images/image2.jpg" class="slide">
-            <img src="/images/image3.jpg" class="slide">
-            <img src="/images/image4.jpg" class="slide">
-            <img src="/images/image5.jpg" class="slide">
-            <img src="/images/image6.jpg" class="slide">
-            <img src="/images/image7.jpg" class="slide">
-            <img src="/images/image8.jpg" class="slide">
-            <img src="/images/image9.jpg" class="slide">
-            <img src="/images/image10.jpg" class="slide">
-            <img src="/images/image11.jpg" class="slide">
-            <img src="/images/image12.jpg" class="slide">
-            <img src="/images/image13.jpg" class="slide">
-            <img src="/images/Image14.jpg" class="slide">
-            <img src="/images/image15.jpg" class="slide">
-        </div>
-    </div>
+  <div class="menu-panel" id="menuPanel">
+    <a href="/">🔙 Back</a>
+    <a href="/info">ℹ️ Info</a>
+    <a href="/source">💻 Source</a>
+  </div>
 
-    <!-- Popup Full-Screen -->
-    <div id="popup" class="popup">
-        <div class="popup-background">
-            <img src="/Background/Photos.jpg" alt="Popup Background">
-        </div>
-        <div class="popup-content">
-            <button id="enter-btn">Masuk</button>
-        </div>
-    </div>
-
-
-    <!-- Navigasi -->
-    <nav id="navbar" class="hidden">
-        <ul>
-            <li><div class="nav-box"><a href="/home/" class="nav-link">Home</a></div></li>
-            <li><div class="nav-box"><a href="/source/" class="nav-link">Source</a></div></li>
-            <li><div class="nav-box"><a href="/info/" class="nav-link">Info</a></div></li>
-        </ul>
-    </nav>
+  <div class="poem" id="poemText">
+Kamu adalah 1 1 nya perempuan yang aku sayang, walaupun kita sudah tidak pacaran lagi, kamu lah 1 1 nya orang yang gak bakalan aku lupakan dan aku gk tega ngelakuin apa yang aku mau atau nyebarin aib kamu, mungkin aku sengaja kirim chat ke reza aku udah punya pacar 2 tahun padahal gk ada sama sekali, tapi yaudah gk papa biar kamu bener bener ngejauhin aku dari hidup ku, kan kamu maunya gk di kekang untuk hubungan kita waktu itu, dan kamu banyak banget cowo yang mau sama kamu, lebih baik aku mundur untuk selamanya dari pada aku masih melihat kamu bersama orang lain, apalagi aku sampai tahu jika ada yang buat kamu nangis, pasti akan aku buat dia gk ada di muka bumi ini. jadi, aku akan tinggal kan kamu selamanya. mudah mudahan di kemudian hari kamu bisa mengingatkan semua yang sudah kita lewati.
+  </div>
 
   <div class="time" id="timeDisplay"></div>
   <div class="time" id="elapsedDisplay"></div>
@@ -184,12 +150,12 @@ button:hover { background: rgba(0,0,0,0.7); }
   <div class="fire-animation" id="fireAnim">🔥</div>
 </section>
 
-
-    <!-- Konten Halaman -->
-    <main id="content">
-        <h2>Selamat Datang</h2>
-        <p>Klik salah satu menu di atas untuk melihat halaman.</p>
-    </main>
+<script>
+function updateTime(){
+  const now = new Date();
+  const timeString = now.toLocaleTimeString();
+  const dateString = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('timeDisplay').textContent = `${dateString} | ${timeString}`;
 
   // Hitung selisih waktu dari 20 Juli 2025
   const startDate = new Date("2025-07-20T00:00:00");
@@ -225,7 +191,6 @@ function toggleMenu(){
   btn.textContent = panel.classList.contains('show') ? '🔙 Back' : '🏠 Home';
 }
 </script>
-
 </body>
 </html>
 
