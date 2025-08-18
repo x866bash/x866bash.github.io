@@ -168,3 +168,73 @@ h1, h2, h3 {
     0 0 30px #ff00ff,
     0 0 40px #ff00ff;
 }
+
+/* ===============================
+   Efek kaca + multi-layer wave
+   =============================== */
+h2, p {
+  text-align: center;
+  width: 70%;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+
+  /* Glassmorphism */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  z-index: 1;
+}
+
+/* Ombak layer pertama */
+h2::before, p::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.15);
+  clip-path: polygon(
+    0% 65%, 10% 70%, 20% 65%, 30% 70%, 40% 65%, 
+    50% 70%, 60% 65%, 70% 70%, 80% 65%, 90% 70%, 100% 65%, 
+    100% 100%, 0% 100%
+  );
+  animation: waveSlow 8s infinite linear;
+  z-index: 0;
+}
+
+/* Ombak layer kedua */
+h2::after, p::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.25);
+  clip-path: polygon(
+    0% 60%, 10% 55%, 20% 60%, 30% 55%, 40% 60%, 
+    50% 55%, 60% 60%, 70% 55%, 80% 60%, 90% 55%, 100% 60%, 
+    100% 100%, 0% 100%
+  );
+  animation: waveFast 4s infinite linear;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+/* Animasi gelombang lambat */
+@keyframes waveSlow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Animasi gelombang cepat */
+@keyframes waveFast {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
