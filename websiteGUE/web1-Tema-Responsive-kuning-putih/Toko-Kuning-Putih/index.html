@@ -7,41 +7,50 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Toko Kuning Putih</h1>
-    <nav>
-      <ul>
-        <li><a href="#">Produk 1</a></li>
-        <li><a href="#">Produk 2</a></li>
-        <li><a href="#">Produk 3</a></li>
-        <li><a href="#">Produk 4</a></li>
-      </ul>
-    </nav>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Cari produk...">
-    </div>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo"></div>
+    <h1 class="store-name">TOKO KUNING PUTIH</h1>
   </header>
 
-  <main>
+  <!-- Navigasi Produk -->
+  <nav class="nav">
+    <button class="nav-item">Produk 1</button>
+    <button class="nav-item">Produk 2</button>
+    <button class="nav-item">Produk 3</button>
+    <button class="nav-item">Produk 4</button>
+  </nav>
+
+  <!-- Search & Filter -->
+  <section class="search-filter">
+    <input type="text" id="searchInput" placeholder="Cari produk...">
+    <select id="filterKategori">
+      <option value="all">Semua Kategori</option>
+      <option value="motor">Motor</option>
+      <option value="pakaian">Pakaian</option>
+      <option value="aksesoris">Aksesoris</option>
+      <option value="elektronik">Elektronik</option>
+    </select>
+  </section>
+
+  <main class="container">
+    <!-- Sidebar -->
     <aside class="sidebar">
-      <ul>
-        <li>Data 1</li>
-        <li>Data 2</li>
-        <li>Data 3</li>
-        <li>Data 4</li>
-        <li>Data 5</li>
-        <li>Data 6</li>
-      </ul>
+      <button class="sidebar-item">Data 1</button>
+      <button class="sidebar-item">Data 2</button>
+      <button class="sidebar-item">Data 3</button>
+      <button class="sidebar-item">Data 4</button>
+      <button class="sidebar-item">Data 5</button>
+      <button class="sidebar-item">Data 6</button>
     </aside>
 
+    <!-- Produk -->
     <section class="products" id="productList">
-      <div class="product-card">Produk A</div>
-      <div class="product-card">Produk B</div>
-      <div class="product-card">Produk C</div>
-      <div class="product-card">Produk D</div>
+      <!-- JS akan inject produk di sini -->
     </section>
   </main>
 
   <script src="js/script.js"></script>
 </body>
 </html>
+
