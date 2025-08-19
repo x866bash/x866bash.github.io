@@ -1,0 +1,201 @@
+ /* =========================
+       GLOBAL
+    ========================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      color: #fff;
+      background: #0e0f13;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    h2, p {
+      text-align: center;
+      margin: 20px;
+    }
+
+    /* =========================
+       SLIDESHOW
+    ========================= */
+    .slideshow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      perspective: 1px;
+      transform-style: preserve-3d;
+    }
+    .slideshow {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      will-change: opacity, transform;
+    }
+    .slide.active {
+      opacity: 1;
+    }
+
+    /* =========================
+       POPUP
+    ========================= */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+    .popup.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .popup-background img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      opacity: 0.4;
+    }
+    .popup-content {
+      position: relative;
+      text-align: center;
+    }
+
+    /* Tombol masuk glowing pulse */
+    #enter-btn {
+      background: linear-gradient(90deg, #00c3ff, #76e4f7);
+      color: #fff;
+      font-size: 1.2em;
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00c3ff,
+                  0 0 20px #00c3ff,
+                  0 0 30px #76e4f7;
+      animation: pulseGlow 2s infinite;
+      transition: transform 0.3s ease;
+    }
+    #enter-btn:hover {
+      transform: scale(1.05);
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 5px #00c3ff, 0 0 10px #76e4f7; }
+      50% { box-shadow: 0 0 20px #00c3ff, 0 0 40px #76e4f7; }
+      100% { box-shadow: 0 0 5px #00c3ff, 0 0 10px #76e4f7; }
+    }
+
+    /* =========================
+       NAVBAR
+    ========================= */
+    nav {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    .nav-box {
+      position: relative;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 6px 14px;
+      transition: 0.4s ease;
+    }
+    .nav-box:hover {
+      border-color: #76e4f7;
+      box-shadow: 0 0 10px #76e4f7,
+                  0 0 20px #00c3ff,
+                  0 0 30px #00c3ff;
+    }
+    .nav-link {
+      position: relative;
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #76e4f7;
+      text-shadow: 0 0 5px #76e4f7,
+                   0 0 10px #00c3ff,
+                   0 0 20px #00c3ff;
+    }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #76e4f7, #00c3ff);
+      box-shadow: 0 0 5px #76e4f7,
+                  0 0 10px #00c3ff,
+                  0 0 20px #00c3ff;
+      transition: width 0.4s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+    main {
+      padding: 100px 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    main.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating animasi teks */
+    main h2, main p {
+      animation: floaty 4s ease-in-out infinite;
+    }
+    @keyframes floaty {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* =========================
+       PAGE TRANSITION
+    ========================= */
+    body.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
