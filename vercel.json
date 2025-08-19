@@ -10,4 +10,8 @@
   "routes": [
     { "src": "/(.*)", "dest": "/index.html" }
   ]
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "outputDirectory": "dist",
+  "framework": "vite"
 }
