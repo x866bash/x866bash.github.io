@@ -35,6 +35,7 @@
   .glass-title{font-size:24px; letter-spacing:.5px; margin-bottom:14px}
   .btn{
     appearance:none; background:transparent; color:#fff; border:2px solid #fff;
+    
     padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:700;
     box-shadow:0 0 16px rgba(255,255,255,.55), 0 8px 24px rgba(0,0,0,.6);
     transition: transform .08s ease, box-shadow .2s ease;
@@ -234,6 +235,24 @@
     opacity: 0.8;
   }
 
+   waktubody{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 100px;
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+   #waktu{
+    font-size: 2em;
+    background: white;
+    display: inline-block;
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shaddow: 0 0 1px;
+rgba(0,0,0,0.1);
+  }
+
   /* ===== Credit ===== */
   .credit{text-align:center; opacity:.7; margin-bottom:28px}
 
@@ -342,12 +361,17 @@
   <p style="color:#cfe; font-size:12px; opacity:0.8; margin-top:8px;">Nikmati musik sambil menjelajahi ruangan</p>
 </div>
 
-<!-- Digital Clock -->
+<!-- Digital Clock
 <div id="digitalClock">
   <div class="digital-time" id="digitalTime">00:00:00</div>
   <div class="digital-date" id="digitalDate">1 Januari 2024</div>
   <div class="digital-day" id="digitalDay">Senin</div>
 </div>
+--->
+
+<waktubody>
+  <div id="waktu">Memuat waktu...</div>
+</waktubody>
 
 <!-- Marquee -->
 <div class="marquee">
@@ -729,8 +753,31 @@ playYouTubeBtn.addEventListener('click', ()=>{
 /* =========================
    Digital Clock
 ========================= */
+  function tampilkanWaktuIndonesia() {
+	  const sekarang = new Date();
 
+  // Mengatur zone waktu ke wib (UTC+7)
+  // Dapat menggunakan tolocaleString dengan opsi timeZone 
+	  const opsiTanggal = {
+		  weekday: 'long',
+		  year: 'numeric',
+		  month: 'long',
+		  day: 'numeric',
+		  hour: '2-diigit',
+		  minute: '2-digit',
+		  second: '2-digit',
+		  hour12: false,
+		  timeZone: 'Asia/Jakarta'
+	}
+	  const waktuWIB = sekarang.tolocaleString('id-ID',
+		  opsiTanggal);
 
+	  document.getElementById('waktu').textContent = waktuWIB;
+	}
+	  
+	  setInterval(tampilkanWaktuIndonesia,
+	1000);
+	  tampilkanWaktuIndonesia(); // Tampilan langsung saat load
 
 /* =========================
    SAFETY
