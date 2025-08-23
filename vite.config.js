@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/', // pastikan root benar di Vercel
+  base: '/public/', // pastikan root benar di Vercel
   build: {
     outDir: 'dist'
   }
