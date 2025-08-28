@@ -6,13 +6,6 @@
   <title>Masalalu saya</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/js/script.js"></script>
-  <script>
-  const page = window.location.pathname || "home";
-  fetch(`https://api-redis-rho.vercel.app/api/visit?page=${encodeURIComponent(page)}`)
-    .then(r => r.json())
-    .then(d => console.log("Tracked:", d))
-    .catch(console.error);
-</script>
 </head>
 <body>
   <!-- Background Slideshow -->
