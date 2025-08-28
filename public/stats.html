@@ -34,6 +34,14 @@
       background: #2a2a2a;
     }
   </style>
+  <script>
+  fetch("https://api-redis-rho.vercel.app/api/stats")
+    .then(r => r.json())
+    .then(d => {
+      // render total/unique + daftar d.visitors
+      console.log(d);
+    });
+</script>
 </head>
 <body>
   <h1>Statistik Pengunjung</h1>
