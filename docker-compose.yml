@@ -1,6 +1,0 @@
-services:
-  puter:
-    image: puter/puter:latest
-    volumes:
-      - ./puter-data:/var/puter
-
