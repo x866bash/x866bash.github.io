@@ -44,7 +44,7 @@
     <ul>
       <li><div class="nav-box"><a href="/home/" class="nav-link">Home</a></div></li>
       <li><div class="nav-box"><a href="/source/" class="nav-link">Source</a></div></li>
-      <li><div class="nav-box"><a href="/info/" class="nav-link">Info</a></div></li>
+      <li><div class="nav-box"><a href="/https://kalkulasi-data-website.vercel.app/" class="nav-link">Info</a></div></li>
       <li><div class="nav-box"><a href="/stats.html" class="nav-link">Stats</a></div></li>
     </ul>
   </nav>
@@ -54,32 +54,6 @@
     <h2>Selamat Datang</h2>
     <p>Datang untuk pergi, tinggal kenangan akan terbiasa untuk terbiasa sendiri.</p>
   </main>
-
-  <!-- Script Tracking Visitor -->
-  <script>
-    // Ganti dengan URL Vercel kamu
-    const API_URL = "https://https://api-redis-rho.vercel.app/api/visit?page=home";
-
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        console.log("Visitor tracked:", data);
-
-        // Tampilkan badge visitor di pojok kanan bawah
-        const stats = document.createElement("div");
-        stats.style.position = "fixed";
-        stats.style.bottom = "10px";
-        stats.style.right = "10px";
-        stats.style.background = "rgba(0,0,0,0.6)";
-        stats.style.color = "#fff";
-        stats.style.padding = "8px 12px";
-        stats.style.borderRadius = "8px";
-        stats.style.fontSize = "14px";
-        stats.innerText = `Total: ${data.total_visitors} | Unique: ${data.unique_visitors}`;
-        document.body.appendChild(stats);
-      })
-      .catch(err => console.error("Error tracking visitor:", err));
-  </script>
 </body>
 </html>
 
